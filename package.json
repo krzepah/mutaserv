@@ -1,6 +1,6 @@
 {
   "name": "mutaserv",
-  "version": "0.0.0a",
+  "version": "0.0.1",
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "license": "MIT",
   "scripts": {
@@ -32,6 +32,7 @@
     "body-parser": "^1.19.0",
     "cross-env": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
+    "mutaserv-formater": "^0.0.0",
     "polka": "latest",
     "ramda": "^0.26.1",
     "sequelize": "^5.10.3",

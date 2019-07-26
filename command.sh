@@ -11,7 +11,8 @@ run() {
   if [ "$1" ]
   then
     echo `pwd`/"$1"
-    export MUTATIONS=`pwd`/"$1"
+    mutaserv-format `pwd`/"$1" >> /tmp/formated-"$1"
+    export MUTATIONS=/tmp/formated-"$1"
     cd `npm root -g`/mutaserv
     npm run start
   else
