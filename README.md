@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://travis-ci.org/krzepah/mutaserv">
-    <img src="https://badgen.now.sh/travis/krzepah/mutaserv" alt="travis" />
+    <img src="https://travis-ci.org/krzepah/mutaserv.svg?branch=master" alt="travis" />
   </a>
   <a href="https://www.npmjs.org/package/mutaserv">
       <img src="https://img.shields.io/npm/v/mutaserv.svg?style=flat" alt="npm">
