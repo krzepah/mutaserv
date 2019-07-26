@@ -1,0 +1,39 @@
+{
+  "name": "mutaserv",
+  "version": "0.0.0",
+  "author": "Patrick Borowy <patrick@krzepah.net>",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development node api/index",
+    "prestart": "npm run create-sqlite-db",
+    "test": "ava",
+    "create-sqlite-db": "shx touch ./database.sqlite",
+    "drop-sqlite-db": "shx rm ./database.sqlite"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-developit",
+    "rules": {
+      "prefer-rest-params": 0
+    }
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.19.0",
+    "cross-env": "^5.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "polka": "latest",
+    "ramda": "^0.26.1",
+    "sequelize": "^5.10.3",
+    "sqlite3": "^4.0.9",
+    "uws": "^9.14.0"
+  },
+  "devDependencies": {
+    "ava": "^2.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-developit": "^1.1.1",
+    "shx": "^0.3.2"
+  },
+  "bin": {
+    "mutaserv": "./command.sh"
+  }
+}
