@@ -3,7 +3,7 @@ const {
 	beforeAction,
 	afterAction
 } = require('../setup/_setup');
-const User = require('../../api/models/User');
+const User = require('../../api/models/user');
 
 let api;
 
