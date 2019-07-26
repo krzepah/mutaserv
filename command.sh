@@ -1,7 +1,7 @@
 #!env sh
 
 help() {
-  cd `npm root`/mutasync-server
+  cd `npm root`/mutaserv
   echo 'mutaserv'
   cat package.json | grep version
   echo 'usage : ./script run mutation_file'
@@ -12,7 +12,7 @@ run() {
   then
     echo `pwd`/"$1"
     export MUTATIONS=`pwd`/"$1"
-    cd `npm root`/mutasync-server
+    cd `npm root -g`/mutaserv
     npm run start
   else
     help
