@@ -4,8 +4,8 @@ const authService = require('../services/auth');
 module.exports = (req, res, next) => {
 	let tokenToVerify;
 
-	if (req.headers.Authorization) {
-		const parts = req.headers.Authorization.split(' ');
+	if (req.headers.Authorization || req.headers.authorization) {
+		const parts = req.headers.Authorization ? req.headers.Authorization.split(' ') : req.headers.authorization.split(' ');
 
 		if (parts.length === 2) {
 			const scheme = parts[0];

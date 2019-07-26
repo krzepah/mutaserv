@@ -8,22 +8,28 @@ const userHandler = require('./handlers/user');
 const { PORT=2017 } = process.env;
 
 const environment = process.env.NODE_ENV;
-const DB = dbService(environment, config.migrate).start();
+dbService(environment, config.migrate).start();
 
 function logger(req, res, next) {
 	console.log(`${req.method} - ${req.url}`);
 	next();
 }
 
-const { handler } = polka()
+const app = polka()
 	.use(json())
 	.use(logger)
 	.get('/', (req, res) => { res.end('Hello World'); })
-	.use('user', userHandler)
-  .listen(PORT, err => {
+	.use('user', userHandler);
+
+
+if (environment !== 'testing') {
+	app.listen(PORT, err => {
 		if (err) throw err;
 		console.log(`> Running on localhost:${PORT}`);
 	});
+}
+
+module.exports = app;
 
 // http.createServer(handler).listen(PORT, err => {
 // 	console.log(`> Running on localhost:${PORT}`);

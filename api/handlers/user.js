@@ -1,5 +1,6 @@
 const polka = require('polka');
 const ramda = require('ramda');
+const send = require('@polka/send-type');
 const { mutations } = require(process.env.MUTATIONS)(ramda);
 const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
@@ -19,26 +20,21 @@ module.exports = polka()
 						}
 					});
 				if (!user) {
-					res.statusCode = 400;
-					return res.end(JSON.stringify({ msg: 'Bad Request: User not found' }));
+					return send(res, 400, { msg: 'Bad Request: User not found' });
 				}
 				if (bcryptService().comparePassword(password, user.password)) {
 					const token = authService().issue({ id: user.id });
 					const userData = JSON.parse(user.data);
-					res.statusCode = 200;
-					return res.end(JSON.stringify({ token, user, ...userData }));
+					return send(res, 200, ({ token, user, ...userData }));
 				}
-				res.statusCode = 401;
-				return res.end({ msg: 'Unauthorized' });
+				return send(res, 401, { msg: 'Unauthorized' });
 			}
 			catch (err) {
 				console.log(err);
-				res.statusCode = 500;
-				return res.end(JSON.stringify({ msg: 'Internal server error' }));
+				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}
-		res.statusCode = 400;
-		return res.end(JSON.stringify({ msg: 'Bad Request: Email or password is wrong' }));
+		return send(res, 400, { msg: 'Bad Request: Email or password is wrong' });
 	})
 	.post('/sign', async (req, res) => {
 		const { body } = req;
@@ -50,17 +46,14 @@ module.exports = polka()
 					password: body.password
 				});
 				const token = authService().issue({ id: user.id });
-				res.statusCode = 200;
-				return res.end(JSON.stringify({ token, user }));
+				return send(res, 200, { token, user });
 			}
 			catch (err) {
 				console.log(err);
-				res.statusCode = 500;
-				return res.end(JSON.stringify({ msg: 'Internal server error' }));
+				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}
-		res.statusCode = 400;
-		return res.end(JSON.stringify({ msg: 'Bad Request: Passwords don\'t match' }));
+		return send(res, 400, { msg: 'Bad Request: Passwords don\'t match' });
 	})
 	.use('/mutate', authMiddleware)
 	.post('/mutate', async (req, res) => {
@@ -69,7 +62,6 @@ module.exports = polka()
 		const user = await User.findOne({ where: { ...id } });
 		const { acts } = req.body;
 		let state = JSON.parse(user.data);
-
 		ramda.map((act) => {
 			const key = Object.keys(act)[0];
 			const update = mutations[key](state, act[key]);
@@ -78,13 +70,11 @@ module.exports = polka()
 
 		user.data = JSON.stringify(state);
 		user.save();
-		res.statusCode = 200;
-		return res.end(JSON.stringify({ msg: 'Ok !' }));
+		return send(res, 200, { msg: 'Ok !' });
 	})
 	.use('/get-state', authMiddleware)
 	.get('/get-state', async (req, res) => {
 		const { id } = req.token;
 		const user = await User.findOne({ where: { ...id } });
-		res.statusCode = 200;
-		return res.end(JSON.stringify({ ...JSON.parse(user.data) }));
+		return send(res, 200, user.data, { 'content-type': 'application/json' });
 	});

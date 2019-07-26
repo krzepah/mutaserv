@@ -3,7 +3,7 @@ module.exports = ({ merge, concat }) => ({
 	mutations: {
 		newElement: (state, { text, newId }) => ({
 			elements: merge({
-				[newId]: text
+				[newId]: { text, id: newId }
 			}, state.elements),
 			elementsIds: concat([newId], state.elementsIds)
 		}),
