@@ -1,9 +1,9 @@
 #!env sh
 
 help() {
-  cd `npm root`/mutaserv
+  cd `npm root -g`/mutaserv
   echo 'mutaserv'
-  cat package.json | grep version
+  cat package.json | grep version -m 1
   echo 'usage : ./script run mutation_file'
 }
 
