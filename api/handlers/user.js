@@ -1,20 +1,90 @@
 const polka = require('polka');
 const ramda = require('ramda');
-const mutations = require(process.env.MUTATIONS)(ramda);
-const authmiddleware = require('../middlewares/auth');
-
+const { mutations } = require(process.env.MUTATIONS)(ramda);
+const authMiddleware = require('../middlewares/auth');
+const authService = require('../services/auth');
+const bcryptService = require('../services/bcrypt');
+const User = require('../models/user');
 
 module.exports = polka()
-	.post('/login', (req, res) => {
-		res.end('ok');
+	.post('/login', async (req, res) => {
+		const { email, password } = req.body;
+
+		if (email && password) {
+			try {
+				const user = await User
+					.findOne({
+						where: {
+							email
+						}
+					});
+				if (!user) {
+					res.statusCode = 400;
+					return res.end(JSON.stringify({ msg: 'Bad Request: User not found' }));
+				}
+				if (bcryptService().comparePassword(password, user.password)) {
+					const token = authService().issue({ id: user.id });
+					const userData = JSON.parse(user.data);
+					res.statusCode = 200;
+					return res.end(JSON.stringify({ token, user, ...userData }));
+				}
+				res.statusCode = 401;
+				return res.end({ msg: 'Unauthorized' });
+			}
+			catch (err) {
+				console.log(err);
+				res.statusCode = 500;
+				return res.end(JSON.stringify({ msg: 'Internal server error' }));
+			}
+		}
+		res.statusCode = 400;
+		return res.end(JSON.stringify({ msg: 'Bad Request: Email or password is wrong' }));
 	})
-	.post('/sign', (req, res) => {
-		res.end('ok');
+	.post('/sign', async (req, res) => {
+		const { body } = req;
+
+		if (body.password === body.password2) {
+			try {
+				const user = await User.create({
+					email: body.email,
+					password: body.password
+				});
+				const token = authService().issue({ id: user.id });
+				res.statusCode = 200;
+				return res.end(JSON.stringify({ token, user }));
+			}
+			catch (err) {
+				console.log(err);
+				res.statusCode = 500;
+				return res.end(JSON.stringify({ msg: 'Internal server error' }));
+			}
+		}
+		res.statusCode = 400;
+		return res.end(JSON.stringify({ msg: 'Bad Request: Passwords don\'t match' }));
 	})
-	.use('/mutate', authmiddleware)
-	.post('/mutate', (req, res) => {
-		res.end('ok');
+	.use('/mutate', authMiddleware)
+	.post('/mutate', async (req, res) => {
+		const { assign } = Object;
+		const { id } = req.token;
+		const user = await User.findOne({ where: { ...id } });
+		const { acts } = req.body;
+		let state = JSON.parse(user.data);
+
+		ramda.map((act) => {
+			const key = Object.keys(act)[0];
+			const update = mutations[key](state, act[key]);
+			state = assign(assign({}, state), update);
+		}, acts);
+
+		user.data = JSON.stringify(state);
+		user.save();
+		res.statusCode = 200;
+		return res.end(JSON.stringify({ msg: 'Ok !' }));
 	})
-	.get('/get-state', (req, res) => {
-		res.end('ok');
+	.use('/get-state', authMiddleware)
+	.get('/get-state', async (req, res) => {
+		const { id } = req.token;
+		const user = await User.findOne({ where: { ...id } });
+		res.statusCode = 200;
+		return res.end(JSON.stringify({ ...JSON.parse(user.data) }));
 	});
