@@ -1,4 +1,3 @@
-// const { http } = require('uws');
 const polka = require('polka');
 const { json } = require('body-parser');
 const config = require('../config/');
