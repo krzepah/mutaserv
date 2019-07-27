@@ -12,6 +12,7 @@
   <a href="https://www.npmjs.org/package/mutaserv">
       <img src="https://img.shields.io/npm/v/mutaserv.svg?style=flat" alt="npm">
   </a>
+  <img src="/coverage/coverage.svg" />
 </p>
 
 > Saves your customers apps state
