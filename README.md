@@ -22,7 +22,19 @@ Provided a mutation system it then saves up your customers app's state.
 
 Works with [storesync](https://github.com/krzepah/StoreSync) & [mutastore](https://github.com/krzepah/mutastore)
 
-## LICENSE
+## Instalation
+
+```
+yarn add -g mutaserv
+```
+
+## Usage
+
+```
+mutaserv ./mutation.js
+```
+
+## License
 
 mutasync-server logo by [Freepik](https://www.freepik.com/) from [flaticon.com](https://www.flaticon.com) is licensed by [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 
