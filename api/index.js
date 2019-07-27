@@ -30,7 +30,3 @@ if (environment !== 'testing') {
 }
 
 module.exports = app;
-
-// http.createServer(handler).listen(PORT, err => {
-// 	console.log(`> Running on localhost:${PORT}`);
-// });

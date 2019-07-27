@@ -10,7 +10,7 @@
     "create-sqlite-db": "shx touch ./database.sqlite",
     "drop-sqlite-db": "shx rm ./database.sqlite",
     "coverage": "coverage-badger -r coverage/clover.xml -d coverage",
-	  "pre-commit": "npm run test",
+    "pre-commit": "npm run test",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "eslintConfig": {
