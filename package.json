@@ -6,9 +6,11 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node api/index",
     "prestart": "npm run create-sqlite-db",
-    "test": "npm run create-sqlite-db; cross-env NODE_ENV=testing MUTATIONS=`pwd`/mutations/formated jest --coverage; npm run drop-sqlite-db",
+    "test": "npm run create-sqlite-db; cross-env NODE_ENV=testing MUTATIONS=`pwd`/mutations/formated jest --coverage; npm run drop-sqlite-db ; npm run coverage; git add coverage/coverage.svg -f",
     "create-sqlite-db": "shx touch ./database.sqlite",
     "drop-sqlite-db": "shx rm ./database.sqlite",
+    "coverage": "coverage-badger -r coverage/clover.xml -d coverage",
+	  "pre-commit": "npm run test",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "eslintConfig": {
@@ -40,9 +42,11 @@
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
+    "coverage-badger": "^1.0.1",
     "eslint": "^6.1.0",
     "eslint-config-developit": "^1.1.1",
     "jest": "^24.8.0",
+    "pre-commit": "^1.2.2",
     "supertest": "^4.0.2"
   },
   "bin": {
