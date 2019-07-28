@@ -13,6 +13,10 @@
     "pre-commit": "npm run test",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
+  "mutaserv": {
+    "port": "9512",
+    "mutations": "./example.js"
+  },
   "eslintConfig": {
     "extends": "eslint-config-developit",
     "rules": {

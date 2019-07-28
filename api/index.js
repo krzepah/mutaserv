@@ -4,8 +4,6 @@ const config = require('../config/');
 const dbService = require('./services/db');
 const userHandler = require('./handlers/user');
 
-const { PORT=2017 } = process.env;
-
 const environment = process.env.NODE_ENV;
 dbService(environment, config.migrate).start();
 
@@ -19,13 +17,5 @@ const app = polka()
 	.use(logger)
 	.get('/', (req, res) => { res.end('Hello World'); })
 	.use('user', userHandler);
-
-
-if (environment !== 'testing') {
-	app.listen(PORT, err => {
-		if (err) throw err;
-		console.log(`> Running on localhost:${PORT}`);
-	});
-}
 
 module.exports = app;
