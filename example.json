@@ -1,0 +1,15 @@
+{
+  "mutaserv": {
+    "port": "9512",
+    "mutations": "./example.js",
+    "database": {
+      "verbose": false,
+      "dialect": "sqlite",
+      "path": "./mutaserv.db",
+      "name": "mutaserv",
+      "username": "mutaserv",
+      "password": "mutaserv",
+      "host": "host"
+    }
+  }
+}

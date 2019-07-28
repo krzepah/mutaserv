@@ -1,7 +1,7 @@
 const polka = require('polka');
 const ramda = require('ramda');
 const send = require('@polka/send-type');
-const { mutations } = require(process.env.MUTATIONS)(ramda);
+const { mutations } = require('../mutations')(process.env.MUTATIONS)(ramda);
 const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
 const bcryptService = require('../services/bcrypt');

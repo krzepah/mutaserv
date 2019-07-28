@@ -1,16 +1,16 @@
 {
   "name": "mutaserv",
-  "version": "0.0.1",
+  "version": "0.0.1a",
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development node api/index",
     "prestart": "npm run create-sqlite-db",
-    "test": "npm run create-sqlite-db; cross-env NODE_ENV=testing MUTATIONS=`pwd`/mutations/formated jest --coverage; npm run drop-sqlite-db ; npm run coverage; git add coverage/coverage.svg -f",
+    "test": "npm run create-sqlite-db; cross-env NODE_ENV=testing MUTATIONS=`pwd`/example.js jest --coverage; npm run drop-sqlite-db ; npm run coverage; git add coverage/coverage.svg -f",
     "create-sqlite-db": "shx touch ./database.sqlite",
     "drop-sqlite-db": "shx rm ./database.sqlite",
     "coverage": "coverage-badger -r coverage/clover.xml -d coverage",
-	  "pre-commit": "npm run test",
+    "pre-commit": "npm run test",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "eslintConfig": {
@@ -34,14 +34,17 @@
     "body-parser": "^1.19.0",
     "cross-env": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
-    "mutaserv-formater": "^0.0.0",
     "polka": "latest",
     "ramda": "^0.26.1",
+    "require-from-string": "^2.0.2",
+    "sade": "^1.6.0",
     "sequelize": "^5.10.3",
     "shx": "^0.3.2",
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
+    "@babel/generator": "^7.5.5",
+    "@babel/parser": "^7.5.5",
     "coverage-badger": "^1.0.1",
     "eslint": "^6.1.0",
     "eslint-config-developit": "^1.1.1",
@@ -50,6 +53,6 @@
     "supertest": "^4.0.2"
   },
   "bin": {
-    "mutaserv": "./command.sh"
+    "mutaserv": "./command.js"
   }
 }
