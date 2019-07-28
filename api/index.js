@@ -1,11 +1,9 @@
 const polka = require('polka');
 const { json } = require('body-parser');
-const config = require('../config/');
 const dbService = require('./services/db');
 const userHandler = require('./handlers/user');
 
-const environment = process.env.NODE_ENV;
-dbService(environment, config.migrate).start();
+dbService().start();
 
 function logger(req, res, next) {
 	console.log(`${req.method} - ${req.url}`);
