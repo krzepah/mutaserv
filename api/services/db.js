@@ -1,4 +1,5 @@
 const database = require('../../config/database');
+const logger = require('../../config/logger');
 
 const dbService = () => {
 	const authenticateDB = () => database.authenticate();
@@ -10,10 +11,10 @@ const dbService = () => {
 		try {
 			await drop();
 			await sync();
-			console.info('migrate has been established successfully');
+			logger.info('migrate has been established successfully');
 		}
 		catch (err) {
-			return console.info('Error : unable to connect to the database:', err);
+			return logger.err('Error : unable to connect to the database:', err);
 		}
 	};
 
@@ -21,10 +22,10 @@ const dbService = () => {
 		try {
 			await authenticateDB();
 			await sync();
-			console.info(' - connection to the database has been established successfully');
+			logger.info('connection to the database has been established successfully');
 		}
 		catch (err) {
-			return console.info('Error : unable to connect to the database:', err);
+			return logger.err('Error : unable to connect to the database:', err);
 		}
 	};
 
