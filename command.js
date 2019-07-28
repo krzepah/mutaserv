@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const sade = require('sade');
 const process = require('process');
 const pjson = require('./package.json');
@@ -7,13 +8,13 @@ const path = require('path');
 
 const prog = sade(pjson.name);
 
-const port = (cpjson, dest) => dest.port ? dest.port : cpjson.port ? cpjson.port : 9000;
+const port = (cpjson, dest) => dest.port ? dest.port : cpjson ? cpjson.port ? cpjson.port : 9000 : 9000;
 const mutations = (cpjson, dest) => {
 	if (dest.mutations || dest.m)
 		return path.resolve(process.cwd(), dest.mutations || dest.m);
-	else if (cpjson.mutations)
+	else if (cpjson && cpjson.mutations)
 		return path.resolve(process.cwd(), cpjson.mutations);
-	process.stdout.write('WARNING : loaded example mutations\n');
+	process.stdout.write('WARNING : Loaded with example mutations\n');
 	return path.resolve(path.dirname(require.main.filename), './example.js');
 };
  
@@ -28,8 +29,12 @@ prog
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
 	.example('run')
 	.action((dest, opts) => {
-		const cpjson = require(path.resolve(process.cwd(), dest.conf)).mutaserv;
+		let cpjson;
+		if (fs.existsSync(path.resolve(process.cwd(), dest.conf)))
+			cpjson = require(path.resolve(process.cwd(), dest.conf)).mutaserv;
 		process.stdout.write('Mutaserv ' + pjson.version + ' starting on port ' + port(cpjson, dest) + '\n');
+		if (cpjson === undefined)
+			process.stdout.write('WARNING : No configuration found in ' + dest.conf + '\n');
 		process.env.NODE_ENV = 'development';
 		process.env.MUTATIONS = mutations(cpjson, dest);
 		const app = require('./api');
