@@ -17,7 +17,7 @@
 
 > Saves your customers apps state
 
-Under the hood it's a Polka API with JWT Authentication with support for sqlite, mysql, and postgresql.
+Under the hood it's a Polka API with JWT Authentication and support for sqlite, mysql, and postgresql.
 Provided a mutation system it then saves up your customers app's state.
 
 Works with [storesync](https://github.com/krzepah/StoreSync) & [mutastore](https://github.com/krzepah/mutastore)
