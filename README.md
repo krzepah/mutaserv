@@ -31,7 +31,7 @@ yarn add -g mutaserv
 ## Usage
 
 ```
-mutaserv ./mutation.js
+mutaserv -h
 ```
 
 ## License
