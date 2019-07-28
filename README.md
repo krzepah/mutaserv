@@ -15,12 +15,9 @@
   <img src="/coverage/coverage.svg" />
 </p>
 
-> Saves your customers apps state
+> Saves your app state
 
-Under the hood it's a Polka API with JWT Authentication and support for sqlite, mysql, and postgresql.
-Provided a mutation system it then saves up your customers app's state.
-
-Works with [storesync](https://github.com/krzepah/StoreSync) & [mutastore](https://github.com/krzepah/mutastore)
+Check out the [wiki](https://github.com/krzepah/mutaserv/wiki) page for more details
 
 ## Instalation
 
