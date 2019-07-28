@@ -1,3 +1,7 @@
 node_modules
 coverage/
 yarn.lock
+package-lock.json
+*.log
+*.db
+.DS_Store
