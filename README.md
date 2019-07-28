@@ -13,11 +13,12 @@
       <img src="https://img.shields.io/npm/v/mutaserv.svg?style=flat" alt="npm">
   </a>
   <img src="/coverage/coverage.svg" />
+  <a href="https://github.com/krzepah/mutaserv/wiki">
+    <img src="https://img.shields.io/badge/wiki-%20-blue" />
+  </a>
 </p>
 
 > Saves your app state
-
-Check out the [wiki](https://github.com/krzepah/mutaserv/wiki) page for more details
 
 ## Instalation
 
