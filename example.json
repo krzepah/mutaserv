@@ -2,6 +2,11 @@
   "mutaserv": {
     "port": "9512",
     "mutations": "./example.js",
+    "log": {
+      "nocolor": false,
+      "path": "./mutaserv.log",
+      "nostdout": false
+    },
     "database": {
       "verbose": false,
       "dialect": "sqlite",
