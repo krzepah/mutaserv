@@ -2,11 +2,17 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const logger = require('./logger');
 
+// logging: process.env.DB_VERBOSE === 'true' ? (msg) => logger.info(msg) : false,
+
+const logging = process.env.DB_VERBOSE === 'true' ?
+	(msg) => logger.info(msg)
+	: false
+
 const database = new Sequelize(
 	process.env.DB_NAME,
 	process.env.DB_USERNAME,
 	process.env.DB_PASSWORD, {
-		logging: process.env.DB_VERBOSE ? (msg) => logger.info(msg) : false,
+		logging,
 		host: process.env.DB_HOST,
 		dialect: process.env.DB_DIALECT ? process.env.DB_DIALECT : 'sqlite',
 		pool: {
