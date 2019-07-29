@@ -29,14 +29,14 @@ prog
 	.option('-p, --port', 'Change the default port	(default 9000)')
 	.option('-m, --muts', 'Change the default muts	(default example.js)')
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
-	.option('-l, --logs', 'Change the default logging file	(default ./mutaserver.log)')
+	.option('-s, --skip', 'Skip any config file')
 	.option('-e --log.env', 'Logs used environement before starting the server', false)
 	.option('--log.args', 'log loaded args')
 	.option('--log.config', 'log loaded configuration on start')
 	.option('--log.nostdout', 'if logs should\'t be displayed in stdout	 (default false)')
 	.option('--log.nocolor', 'if logs shouldn\'t use colors	(default false)')
 	.option('--log.path', 'Change the default logging file (default ./mutaserver.log)')
-	.option('--db.verbose', 'Database query verbosity	 (default false)')
+	.option('--db.verbose', 'Database verbosity	 (default false)')
 	.option('--db.dialect', 'Database dialect	 (default sqlite)')
 	.option('--db.host', 'Database host	 (default localhost)')
 	.option('--db.path', 'Sqlite database path	(default ./mutaserv.db)')
@@ -45,7 +45,7 @@ prog
 	.example('run')
 	.action((opts) => {
 		let config = { database: { }, log: { } };
-		if (fs.existsSync(path.resolve(process.cwd(), opts.conf)))
+		if (!opts.skip && fs.existsSync(path.resolve(process.cwd(), opts.conf)))
 			config = require(path.resolve(process.cwd(), opts.conf)).mutaserv;
 
 		if (opts['log.nocolor'])
@@ -81,8 +81,10 @@ prog
 			'Mutaserv ' + pjson.version + ' starting on port ' + port(config, opts)
 		);
 		logger.info('logging into ' + process.env.LOGS_PATH);
-		if (config === undefined)
+		if (!opts.skip && config === undefined)
 			logger.warn('no configuration found in ' + opts.conf);
+		else if (opts.skip)
+			logger.info('no configuration loaded');
 		else if (opts['log.config'])
 			logger.info('loaded config : ' + JSON.stringify(config, null, 4));
 		if (opts['log.args'])
