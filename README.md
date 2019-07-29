@@ -16,6 +16,9 @@
   <a href="https://github.com/krzepah/mutaserv/wiki">
     <img src="https://img.shields.io/badge/wiki-%20-blue" />
   </a>
+  <a href="https://snyk.io/test/npm/mutaserv">
+    <img src="https://img.shields.io/snyk/vulnerabilities/npm/mutaserv" />
+  </a>
 </p>
 
 > Saves your app state
