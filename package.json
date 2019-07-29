@@ -1,6 +1,6 @@
 {
   "name": "mutaserv",
-  "version": "0.0.2",
+  "version": "0.0.2b",
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "license": "MIT",
   "scripts": {
@@ -42,10 +42,10 @@
     "shx": "^0.3.2",
     "sqlite3": "^4.0.9",
     "winston": "^3.2.1"
+    "@babel/generator": "^7.5.5",
+    "@babel/parser": "^7.5.5"
   },
   "devDependencies": {
-    "@babel/generator": "^7.5.5",
-    "@babel/parser": "^7.5.5",
     "coverage-badger": "^1.0.1",
     "eslint": "^6.1.0",
     "eslint-config-developit": "^1.1.1",

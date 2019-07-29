@@ -13,14 +13,15 @@
       <img src="https://img.shields.io/npm/v/mutaserv.svg?style=flat" alt="npm">
   </a>
   <img src="/coverage/coverage.svg" />
+  <a href="https://github.com/krzepah/mutaserv/wiki">
+    <img src="https://img.shields.io/badge/wiki-%20-blue" />
+  </a>
+  <a href="https://snyk.io/test/npm/mutaserv">
+    <img src="https://img.shields.io/snyk/vulnerabilities/npm/mutaserv" />
+  </a>
 </p>
 
-> Saves your customers apps state
-
-Under the hood it's a Polka API with JWT Authentication and support for sqlite, mysql, and postgresql.
-Provided a mutation system it then saves up your customers app's state.
-
-Works with [storesync](https://github.com/krzepah/StoreSync) & [mutastore](https://github.com/krzepah/mutastore)
+> Saves your app state
 
 ## Instalation
 
