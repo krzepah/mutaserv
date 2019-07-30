@@ -2,18 +2,19 @@ const polka = require('polka');
 const { json } = require('body-parser');
 const dbService = require('./services/db');
 const userHandler = require('./handlers/user');
+const logger = require('../config/logger');
 
 dbService().start();
 
-function logger(req, res, next) {
-	console.log(`${req.method} - ${req.url}`);
+function log(req, res, next) {
+	logger.info(req.method + ' ' + req.url + ' ' + res.statusCode);
 	next();
 }
 
 const app = polka()
 	.use(json())
-	.use(logger)
 	.get('/', (req, res) => { res.end('Hello World'); })
-	.use('user', userHandler);
+	.use('user', userHandler)
+	.use(log);
 
 module.exports = app;

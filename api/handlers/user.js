@@ -1,11 +1,12 @@
 const polka = require('polka');
 const ramda = require('ramda');
 const send = require('@polka/send-type');
-const { mutations } = require('../mutations')(process.env.MUTATIONS)(ramda);
+const { mutations } = require('../mutations')()(ramda);
 const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
 const bcryptService = require('../services/bcrypt');
 const User = require('../models/user');
+const logger = require('../../config/logger');
 
 module.exports = polka()
 	.post('/login', async (req, res) => {
@@ -30,7 +31,7 @@ module.exports = polka()
 				return send(res, 401, { msg: 'Unauthorized' });
 			}
 			catch (err) {
-				console.log(err);
+				logger.err(err);
 				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}
@@ -49,7 +50,7 @@ module.exports = polka()
 				return send(res, 200, { token, user });
 			}
 			catch (err) {
-				console.log(err);
+				logger.err(err);
 				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}

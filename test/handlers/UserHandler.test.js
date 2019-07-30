@@ -81,7 +81,6 @@ test('User | get-state (auth)', async () => {
 		.set('Authorization', `Bearer ${login.body.token}`)
 		.set('Content-Type', 'application/json')
 		.expect(200);
-
 	expect(state.body.elements).toEqual({ });
 	expect(state.body.elementsIds).toEqual([]);
 

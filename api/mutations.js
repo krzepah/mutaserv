@@ -3,8 +3,10 @@ const generate = require('@babel/generator').default;
 const ramda = require('ramda');
 const fs = require('fs');
 const requireFromString = require('require-from-string');
+const process = require('process');
+const logger = require('../config/logger');
 
-const format = (path) => {
+const load = (path) => {
 	let contents = fs.readFileSync(path, 'utf8');
 	const ast = parse(contents, { sourceType: 'module' });
 
@@ -27,9 +29,12 @@ const format = (path) => {
 };
 
 let mod = null;
-
-module.exports = (path) => {
-	if (mod === null)
-		mod = requireFromString(format(path));
+module.exports = () => {
+	if (mod === null) {
+		mod = requireFromString(load(process.env.MUTATIONS));
+		logger.info('Loading mutations from ' + process.env.MUTATIONS);
+		if (process.env.LOGS_MUTATIONS)
+			logger.info('Loaded mutations are ' + mod);
+	}
 	return mod;
 };

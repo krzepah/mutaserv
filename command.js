@@ -36,6 +36,7 @@ prog
 	.option('--log.nostdout', 'If logs should\'t be displayed in stdout	 (default false)')
 	.option('--log.nocolor', 'If logs shouldn\'t use colors	(default false)')
 	.option('--log.path', 'Change the default logging file (default ./mutaserver.log)')
+	.option('--log.mutations', 'Logs the loaded mutations  (default false)')
 	.option('--db.verbose', 'Database verbosity	 (default false)')
 	.option('--db.dialect', 'Database dialect	 (default sqlite)')
 	.option('--db.host', 'Database host	 (default localhost)')
@@ -47,6 +48,13 @@ prog
 		let config = { database: { }, log: { } };
 		if (!opts.skip && fs.existsSync(path.resolve(process.cwd(), opts.conf)))
 			config = require(path.resolve(process.cwd(), opts.conf)).mutaserv;
+
+		if (opts['log.mutations'])
+			process.env.LOGS_MUTATIONS = opts['log.mutations'] !== true;
+		else if (config && config.log && config.log.mutations != undefined)
+			process.env.LOGS_MUTATIONS = config.log.mutations !== 'true' && !(config.log.mutations);
+		else
+			process.env.LOGS_MUTATIONS = false;
 
 		if (opts['log.nocolor'])
 			process.env.LOGS_COLOR = opts['log.nocolor'] !== true;
