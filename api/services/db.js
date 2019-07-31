@@ -11,10 +11,10 @@ const dbService = () => {
 		try {
 			await drop();
 			await sync();
-			logger.info('migrate has been established successfully');
+			logger.info('Migrate has been established successfully');
 		}
 		catch (err) {
-			return logger.err('Error : unable to connect to the database:', err);
+			return logger.err('Unable to connect to the database : ' + err);
 		}
 	};
 
@@ -22,10 +22,10 @@ const dbService = () => {
 		try {
 			await authenticateDB();
 			await sync();
-			logger.info('connection to the database has been established successfully');
+			logger.info('Connection to the database has been established successfully');
 		}
 		catch (err) {
-			return logger.err('Error : unable to connect to the database:', err);
+			return logger.err('Unable to connect to the database : ' + err);
 		}
 	};
 
