@@ -4,7 +4,7 @@ const ramda = require('ramda');
 const fs = require('fs');
 const sade = require('sade');
 const process = require('process');
-const pjson = require('./package.json');
+const pjson = require('../package.json');
 const path = require('path');
 
 const prog = sade(pjson.name);
@@ -106,7 +106,7 @@ const loadEnv = (opts) => {
 		// eslint-disable-next-line
 		logger.info('env : ' + JSON.stringify(process.env, null, 4));
 	}
-	const app = require('./api');
+	const app = require('./index');
 	app.listen(port(config, opts), err => {
 		if (err) throw err;
 	});

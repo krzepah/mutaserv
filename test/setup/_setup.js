@@ -1,6 +1,6 @@
 
-const database = require('../../api/config/database');
-const { handler } = require('../../api');
+const database = require('../../package/config/database');
+const { handler } = require('../../package/index');
 
 const beforeAction = async () => {
 	await database.authenticate();

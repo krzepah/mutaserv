@@ -4,7 +4,7 @@
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=development node api/index",
+    "start": "cross-env NODE_ENV=development node package/index",
     "prestart": "npm run create-sqlite-db",
     "test": "npm run create-sqlite-db; cross-env LOGS_PATH=./test/tests.log MUTATIONS=`pwd`/test/mutations.js jest --coverage; npm run drop-sqlite-db ; npm run coverage; git add coverage/coverage.svg -f",
     "create-sqlite-db": "shx touch ./database.sqlite",
@@ -54,6 +54,6 @@
     "supertest": "^4.0.2"
   },
   "bin": {
-    "mutaserv": "./command.js"
+    "mutaserv": "./package/command.js"
   }
 }
