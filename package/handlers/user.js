@@ -4,6 +4,7 @@ const send = require('@polka/send-type');
 const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
 const bcryptService = require('../services/bcrypt');
+const dbService = require('../services/db');
 const User = require('../models/user');
 const logger = require('../config/logger');
 
@@ -11,6 +12,14 @@ let mutations;
 
 const mutationReloader = (mod) => {
 	mutations = mod(ramda);
+	try {
+		dbService().drop();
+		dbService().sync();
+		logger.info('Dropped database');
+	}
+	catch (err) {
+		logger.error(err);
+	}
 };
 
 mutations = require('../mutations')(
@@ -29,9 +38,8 @@ module.exports = polka()
 							email
 						}
 					});
-				if (!user) {
+				if (!user)
 					return send(res, 400, { msg: 'Bad Request: User not found' });
-				}
 				if (bcryptService().comparePassword(password, user.password)) {
 					const token = authService().issue({ id: user.id });
 					const userData = JSON.parse(user.data);
@@ -48,9 +56,6 @@ module.exports = polka()
 	})
 	.post('/sign', async (req, res) => {
 		const { body } = req;
-		logger.info(JSON.stringify(mutations));
-		logger.info(JSON.stringify(mutations.defaults));
-		logger.info(JSON.stringify(body));
 		if (body.password === body.password2) {
 			try {
 				const user = await User.create({

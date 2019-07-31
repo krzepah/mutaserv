@@ -35,7 +35,7 @@ const doLoad = (path) => {
 	mod = requireFromString(load(path));
 	logger.info('Loading mutations from ' + process.env.MUTATIONS);
 	if (process.env.LOGS_MUTATIONS)
-		logger.info('Loaded mutations are ' + mod);
+		logger.info('Loaded mutations : \n' + mod);
 	if (process.env.DISPLAY_MUTATIONS) {
 		//eslint-disable-next-line
 		console.log(mod.toString());
@@ -52,9 +52,11 @@ module.exports = (path, listener) => {
 		}
 		logger.info('Watching : ' + mutationFolder);
 		watcher.subscribe(mutationFolder, (err, events) => {
-			logger.info('Mutation folder got updated' + events);
-			doLoad(process.env.MUTATIONS);
-			listener(mod);
+			if (process.env.RELOAD) {
+				logger.info('Mutation folder got updated');
+				doLoad(process.env.MUTATIONS);
+				listener(mod);
+			}
 		});
 		doLoad(path);
 	}
