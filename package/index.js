@@ -17,8 +17,16 @@ const server = http.createServer();
 
 const app = polka({ server })
 	.use(json())
-	.get('/', (req, res) => { res.end('Hello World'); })
 	.use('user', userHandler)
 	.use(log);
+
+if (process.env.SERVE && process.env.SERVE !== 'true') {
+	logger.info('Serving files from ' + process.env.SERVE);
+	const serve = require('sirv')(process.env.SERVE);
+	app.use(serve);
+}
+else if (process.env.SERVE === 'true') {
+	logger.error('-s --serve command requieres a parameter. Cannot serve any file.');
+}
 
 module.exports = app;

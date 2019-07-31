@@ -31,6 +31,11 @@ const loadEnv = (opts) => {
 	else if (!opts.skip)
 		config = require(process.env.MUTA_CONFIG);
 
+	if (opts.serve)
+		process.env.SERVE = opts.serve;
+	else if (config && config.serve)
+		process.env.SERVE = config.serve;
+
 	if (opts.reload)
 		process.env.RELOAD = opts.reload;
 	else if (config && config.reload)
@@ -126,7 +131,8 @@ prog
 	.option('-p, --port', 'Change the default port	(default 9000)')
 	.option('-m, --muts', 'Change the default muts	(default example.js)')
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
-	.option('-s, --skip', 'Skip any config file')
+	.option('-s, --serve', 'Serves folder passed as parameter')
+	.option('--skip', 'Skip any config file')
 	.option('-r, --reload', 'Mutations are reloaded and database purged when mutations files are updated (default false)')
 	.option('-e --log.env', 'Logs used environement before starting the server', false)
 	.option('--log.args', 'Log loaded args')
