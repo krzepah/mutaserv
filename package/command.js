@@ -122,10 +122,10 @@ prog
 	.option('-e --log.env', 'Logs used environement before starting the server', false)
 	.option('--log.args', 'Log loaded args')
 	.option('--log.config', 'Log loaded configuration on start')
+	.option('--log.mutations', 'Logs the loaded mutations  (default false)')
 	.option('--log.nostdout', 'If logs should\'t be displayed in stdout	 (default false)')
 	.option('--log.nocolor', 'If logs shouldn\'t use colors	(default false)')
 	.option('--log.path', 'Change the default logging file (default ./mutaserver.log)')
-	.option('--log.mutations', 'Logs the loaded mutations  (default false)')
 	.option('--db.verbose', 'Database verbosity	 (default false)')
 	.option('--db.dialect', 'Database dialect	 (default sqlite)')
 	.option('--db.host', 'Database host	 (default localhost)')
@@ -134,8 +134,17 @@ prog
 	.option('--db.password', 'Database password	 (default mutaserv)')
 	.example('run')
 	.action((opts) => loadEnv(opts));
-		
-		
+
+prog
+	.command('load <src>')
+	.describe('Shows how a mutation file is loaded')
+	.option('--log.mutations', 'Logs the loaded mutations', false)
+	.action((src, opts) => {
+		process.env.DISPLAY_MUTATIONS = true;
+		//eslint-disable-next-line
+		const format = require('./mutations')(src)(ramda);
+	});
+
 prog.parse(process.argv);
 
 module.exports = loadEnv;

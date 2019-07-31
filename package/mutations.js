@@ -29,12 +29,16 @@ const load = (path) => {
 };
 
 let mod = null;
-module.exports = () => {
+module.exports = (path) => {
 	if (mod === null) {
-		mod = requireFromString(load(process.env.MUTATIONS));
+		mod = requireFromString(load(path));
 		logger.info('Loading mutations from ' + process.env.MUTATIONS);
 		if (process.env.LOGS_MUTATIONS)
 			logger.info('Loaded mutations are ' + mod);
+		if (process.env.DISPLAY_MUTATIONS) {
+			//eslint-disable-next-line
+			console.log(mod.toString());
+		}
 	}
 	return mod;
 };
