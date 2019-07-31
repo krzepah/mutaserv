@@ -61,7 +61,8 @@ test('User | login', async () => {
 test('User | get-state (auth)', async () => {
 	const user = await User.create({
 		email: 'martin@mail.com',
-		password: 'securepassword'
+		password: 'securepassword',
+		data: JSON.stringify({ elements: {}, elementsIds: [] })
 	});
 
 	const login = await request(api)
@@ -90,7 +91,8 @@ test('User | get-state (auth)', async () => {
 test('User | mutate (auth)', async () => {
 	const user = await User.create({
 		email: 'martin@mail.com',
-		password: 'securepassword'
+		password: 'securepassword',
+		data: JSON.stringify({ elements: {}, elementsIds: [] })
 	});
 
 	const login = await request(api)

@@ -1,8 +1,6 @@
 const Sequelize = require('sequelize');
 const bcryptService = require('../services/bcrypt');
 const sequelize = require('../config/database');
-const ramda = require('ramda');
-const { defaults } = require('../mutations')(process.env.MUTATIONS)(ramda);
 
 const hooks = {
 	beforeCreate(user) {
@@ -17,13 +15,8 @@ const User = sequelize.define('User', {
 		type: Sequelize.STRING,
 		unique: true
 	},
-	password: {
-		type: Sequelize.STRING
-	},
-	data: {
-		type: Sequelize.STRING,
-		defaultValue: JSON.stringify(defaults)
-	}
+	password: { type: Sequelize.STRING },
+	data: { type: Sequelize.STRING }
 }, { hooks, tableName });
 
 // eslint-disable-next-line

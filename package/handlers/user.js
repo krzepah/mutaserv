@@ -1,7 +1,7 @@
 const polka = require('polka');
 const ramda = require('ramda');
 const send = require('@polka/send-type');
-const { mutations } = require('../mutations')(process.env.MUTATIONS)(ramda);
+const { mutations, defaults } = require('../mutations')(process.env.MUTATIONS)(ramda);
 const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
 const bcryptService = require('../services/bcrypt');
@@ -31,7 +31,7 @@ module.exports = polka()
 				return send(res, 401, { msg: 'Unauthorized' });
 			}
 			catch (err) {
-				logger.err(err);
+				logger.error(err);
 				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}
@@ -44,13 +44,14 @@ module.exports = polka()
 			try {
 				const user = await User.create({
 					email: body.email,
-					password: body.password
+					password: body.password,
+					data: JSON.stringify(defaults)
 				});
 				const token = authService().issue({ id: user.id });
 				return send(res, 200, { token, user });
 			}
 			catch (err) {
-				logger.err(err);
+				logger.error(err);
 				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}
