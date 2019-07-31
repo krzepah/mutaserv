@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node api/index",
     "prestart": "npm run create-sqlite-db",
-    "test": "npm run create-sqlite-db; cross-env NODE_ENV=testing LOGS_PATH=./test/tests.log MUTATIONS=`pwd`/example.js jest --coverage; npm run drop-sqlite-db ; npm run coverage; git add coverage/coverage.svg -f",
+    "test": "npm run create-sqlite-db; cross-env LOGS_PATH=./test/tests.log MUTATIONS=`pwd`/test/mutations.js jest --coverage; npm run drop-sqlite-db ; npm run coverage; git add coverage/coverage.svg -f",
     "create-sqlite-db": "shx touch ./database.sqlite",
     "drop-sqlite-db": "shx rm ./database.sqlite",
     "coverage": "coverage-badger -r coverage/clover.xml -d coverage",

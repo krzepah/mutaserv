@@ -6,7 +6,7 @@ const beforeAction = async () => {
 	await database.authenticate();
 	await database.drop();
 	//eslint-disable-next-line
-	await database.sync()
+	await database.sync();
 	return handler;
 };
 
