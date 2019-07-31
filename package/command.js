@@ -113,8 +113,9 @@ const loadEnv = (opts) => {
 		// eslint-disable-next-line
 		logger.info('env : ' + JSON.stringify(process.env, null, 4));
 	}
-	const app = require('./index');
-	app.listen(port(config, opts), err => {
+	const server = require('./index');
+	server.listen(port(config, opts), err => {
+		logger.info('Listening on port : ' + port(config, opts));
 		if (err) throw err;
 	});
 };

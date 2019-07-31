@@ -1,4 +1,6 @@
 const polka = require('polka');
+const http = require('http');
+// const io = require('socket.io');
 const { json } = require('body-parser');
 const dbService = require('./services/db');
 const userHandler = require('./handlers/user');
@@ -11,7 +13,9 @@ function log(req, res, next) {
 	next();
 }
 
-const app = polka()
+const server = http.createServer();
+
+const app = polka({ server })
 	.use(json())
 	.get('/', (req, res) => { res.end('Hello World'); })
 	.use('user', userHandler)
