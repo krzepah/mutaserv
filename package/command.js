@@ -88,7 +88,7 @@ const loadEnv = (opts) => {
 			return path.resolve(path.dirname(opts.c), config.mutations);
 		}
 		logger.warn('Loaded with test mutations (mutaserv run -h for help)');
-		return path.resolve(path.dirname(require.main.filename), './test/mutations.js');
+		return path.resolve(path.dirname(require.main.filename), '../test/mutations.js');
 	};
 	process.env.MUTATIONS = mutations(config, opts);
 

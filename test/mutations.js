@@ -18,7 +18,8 @@ const mutations = {
 
 const defaults = {
 	elements: { },
-	elementsIds: [ ]
+	elementsIds: [ ],
+	bar: 'bar'
 };
 
 export {
