@@ -146,7 +146,6 @@ prog
 prog
 	.command('load <src>')
 	.describe('Shows how a mutation file is loaded')
-	.option('--log.mutations', 'Logs the loaded mutations', false)
 	.action((src, opts) => {
 		process.env.DISPLAY_MUTATIONS = true;
 		//eslint-disable-next-line
