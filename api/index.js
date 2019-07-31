@@ -2,7 +2,7 @@ const polka = require('polka');
 const { json } = require('body-parser');
 const dbService = require('./services/db');
 const userHandler = require('./handlers/user');
-const logger = require('../config/logger');
+const logger = require('./config/logger');
 
 dbService().start();
 

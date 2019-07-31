@@ -6,7 +6,7 @@ const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
 const bcryptService = require('../services/bcrypt');
 const User = require('../models/user');
-const logger = require('../../config/logger');
+const logger = require('../config/logger');
 
 module.exports = polka()
 	.post('/login', async (req, res) => {

@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const bcryptService = require('../services/bcrypt');
-const sequelize = require('../../config/database');
+const sequelize = require('../config/database');
 const ramda = require('ramda');
 const { defaults } = require('../mutations')()(ramda);
 

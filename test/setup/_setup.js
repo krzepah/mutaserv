@@ -1,5 +1,5 @@
 
-const database = require('../../config/database');
+const database = require('../../api/config/database');
 const { handler } = require('../../api');
 
 const beforeAction = async () => {

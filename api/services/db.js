@@ -1,5 +1,5 @@
-const database = require('../../config/database');
-const logger = require('../../config/logger');
+const database = require('../config/database');
+const logger = require('../config/logger');
 
 const dbService = () => {
 	const authenticateDB = () => database.authenticate();

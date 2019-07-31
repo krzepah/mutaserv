@@ -4,7 +4,7 @@ const ramda = require('ramda');
 const fs = require('fs');
 const requireFromString = require('require-from-string');
 const process = require('process');
-const logger = require('../config/logger');
+const logger = require('./config/logger');
 
 const load = (path) => {
 	let contents = fs.readFileSync(path, 'utf8');
