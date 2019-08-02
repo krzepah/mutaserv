@@ -11,7 +11,7 @@ const logger = require('../config/logger');
 let mutations;
 
 const mutationReloader = (mod) => {
-	mutations = mod(ramda);
+	mutations = mod;
 	try {
 		dbService().drop();
 		dbService().sync();
@@ -22,9 +22,9 @@ const mutationReloader = (mod) => {
 	}
 };
 
-mutations = require('../mutations')(
+mutations = require('../mutations').watch(
 	process.env.MUTATIONS, mutationReloader
-)(ramda);
+);
 
 module.exports = polka()
 	.post('/login', async (req, res) => {

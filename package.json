@@ -57,6 +57,6 @@
     "supertest": "^4.0.2"
   },
   "bin": {
-    "mutaserv": "node --no-warnings ./package/command.js"
+    "mutaserv": "./package/command.js"
   }
 }

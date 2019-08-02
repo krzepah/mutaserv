@@ -14,7 +14,7 @@
       "name": "mutaserv",
       "username": "mutaserv",
       "password": "mutaserv",
-      "host": "host"
+      "host": "localhost"
     }
   }
 }

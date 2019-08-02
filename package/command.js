@@ -132,6 +132,7 @@ prog
 	.option('-m, --muts', 'Change the default muts	(default example.js)')
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
 	.option('-s, --serve', 'Serves folder passed as parameter')
+	.option('-w, --watch', 'Watches folder for changes and triggers a build')
 	.option('--skip', 'Skip any config file')
 	.option('-r, --reload', 'Mutations are reloaded and database purged when mutations files are updated (default false)')
 	.option('-e --log.env', 'Logs used environement before starting the server', false)
@@ -155,8 +156,10 @@ prog
 	.describe('Shows how a mutation file is loaded')
 	.action((src, opts) => {
 		process.env.DISPLAY_MUTATIONS = true;
+		const mutations = require('./mutations');
+		const format = mutations.format(src);
 		//eslint-disable-next-line
-		const format = require('./mutations')(src)(ramda);
+		console.log(format);
 	});
 
 prog.parse(process.argv);

@@ -6,3 +6,4 @@ package-lock.json
 *.db
 *.sqlite
 .DS_Store
+example
