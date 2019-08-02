@@ -1,28 +1,21 @@
-
 import { merge, concat } from 'ramda';
+import createStore from 'stockroom/worker';
 
-const mutations = {
-	newElement: (state, { text, newId }) => ({
-		elements: merge({
-			[newId]: { text, id: newId }
-		}, state.elements),
-		elementsIds: concat([newId], state.elementsIds)
-	}),
-	authenticate: (state, { ...props }) => ({
-		...props,
-		elements: merge(props.elements, state.elements),
-		elementsIds: concat(state.elementsIds, props.elementsIds)
-	}),
-	logout: (state, { ...defaults }) => ({ ...defaults })
-};
+let store = createStore({
+	count: 0,
+	elements: {},
+	elementsIds: []
+});
 
-const defaults = {
-	elements: { },
-	elementsIds: [ ],
-	bar: 'baz'
-};
+store.registerActions( store => ({
+	increment: ({ count }) => ({ count: count + 1 })
+}));
 
-export {
-	mutations,
-	defaults
-};
+store.registerActions( store => ({
+	newElement: ({ elements, elementsIds }, { text, newId }) => ({
+		elementsIds: concat(elementsIds, [newId]),
+		elements: merge(elements, { [newId]: { text, id: newId } })
+	})
+}));
+
+export default store;

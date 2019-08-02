@@ -110,7 +110,7 @@ const load = (path) => {
 	let stringMod = '';
 	try {
 		stringMod = format(path);
-		mod = requireFromString(stringMod);
+		mod = requireFromString(stringMod)(ramda);
 	}
 	catch (err) {
 		//eslint-disable-next-line
@@ -142,11 +142,11 @@ const watch = (path, listener) => {
 		if (process.env.RELOAD) {
 			logger.info('Mutation folder got updated');
 			load(process.env.MUTATIONS);
-			listener(mod(ramda));
+			listener(mod);
 		}
 	});
 	load(path);
-	return mod(ramda);
+	return mod;
 };
 
 module.exports = {
