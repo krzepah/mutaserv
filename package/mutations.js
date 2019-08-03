@@ -48,10 +48,10 @@ const format = (path) => {
 		}, out.program.body
 	);
 
-	// TODO : move allowed into a configurable
-	// -a --allow ramda,lodash,whatever
-
-	const allowed = ['ramda'];
+	let allowed = ['ramda'];
+	if (process.env.ALLOWED)
+		allowed = process.env.ALLOWED.split(',');
+	logger.info('Allowed modules are : ' + JSON.stringify(allowed));
 	let imports = [];
 	ramda.map(
 		(node) => {
@@ -118,10 +118,13 @@ const load = (path) => {
 	}
 	logger.info('Loading mutations from ' + process.env.MUTATIONS);
 	if (process.env.LOGS_MUTATIONS)
-		logger.info('Loaded mutations : \n' + mod);
+		logger.info(
+			'Loaded mutations : \n' +
+			stringMod
+		);
 	if (process.env.DISPLAY_MUTATIONS) {
 		//eslint-disable-next-line
-		console.log('Loaded mutations : \n' + mod.toString());
+		console.log('Loaded mutations : \n' + stringMod);
 	}
 };
 
