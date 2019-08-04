@@ -128,6 +128,20 @@ const load = (path) => {
 	}
 };
 
+const { spawn } = require('child_process');
+const triggerBuild = () => {
+	const build = spawn('npm', ['run', 'build']);
+	build.stdout.on('data', (data) => {
+	  logger.info(`build: ${data}`);
+	});
+	build.stderr.on('data', (data) => {
+	  logger.error(`stderr: ${data}`);
+	});
+	build.on('close', (code) => {
+	  logger.info(`child process exited with code ${code}`);
+	});
+};
+
 /**
  * Watches path for changes
  *  - Loads the new module internally
@@ -146,6 +160,9 @@ const watch = (path, listener) => {
 			logger.info('Mutation folder got updated');
 			load(process.env.MUTATIONS);
 			listener(mod);
+		}
+		if (process.env.WATCH) {
+			triggerBuild();
 		}
 	});
 	load(path);

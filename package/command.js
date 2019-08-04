@@ -137,7 +137,6 @@ prog
 	.option('-m, --muts', 'Change the default muts	(default example.js)')
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
 	.option('-s, --serve', 'Serves folder passed as parameter')
-	.option('-w, --watch', 'Watches folder for changes and triggers a build')
 	.option('-a, --allow', 'Specifies which dependencies are allowed in mutations  (default ramda)')
 	.option('--skip', 'Skip any config file')
 	.option('-r, --reload', 'Mutations are reloaded and database purged when mutations files are updated (default false)')
