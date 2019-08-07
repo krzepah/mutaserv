@@ -1,12 +1,12 @@
 
-const database = require('../../config/database');
-const { handler } = require('../../api');
+const database = require('../../package/config/database');
+const { handler } = require('../../package/index');
 
 const beforeAction = async () => {
 	await database.authenticate();
 	await database.drop();
 	//eslint-disable-next-line
-	await database.sync()
+	await database.sync();
 	return handler;
 };
 

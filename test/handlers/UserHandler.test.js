@@ -3,7 +3,7 @@ const {
 	beforeAction,
 	afterAction
 } = require('../setup/_setup');
-const User = require('../../api/models/user');
+const User = require('../../package/models/user');
 
 let api;
 
@@ -61,7 +61,8 @@ test('User | login', async () => {
 test('User | get-state (auth)', async () => {
 	const user = await User.create({
 		email: 'martin@mail.com',
-		password: 'securepassword'
+		password: 'securepassword',
+		data: JSON.stringify({ elements: {}, elementsIds: [] })
 	});
 
 	const login = await request(api)
@@ -81,7 +82,6 @@ test('User | get-state (auth)', async () => {
 		.set('Authorization', `Bearer ${login.body.token}`)
 		.set('Content-Type', 'application/json')
 		.expect(200);
-
 	expect(state.body.elements).toEqual({ });
 	expect(state.body.elementsIds).toEqual([]);
 
@@ -91,7 +91,8 @@ test('User | get-state (auth)', async () => {
 test('User | mutate (auth)', async () => {
 	const user = await User.create({
 		email: 'martin@mail.com',
-		password: 'securepassword'
+		password: 'securepassword',
+		data: JSON.stringify({ elements: {}, elementsIds: [] })
 	});
 
 	const login = await request(api)

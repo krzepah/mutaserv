@@ -2,7 +2,7 @@ const {
 	beforeAction,
 	afterAction
 } = require('../setup/_setup');
-const User = require('../../api/models/user');
+const User = require('../../package/models/user');
 
 let user;
 

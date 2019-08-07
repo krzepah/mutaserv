@@ -12,9 +12,10 @@ let transports = [];
 
 if (process.env.LOGS_NOSTDOUT !== 'true')
 	transports.push(new winston.transports.Console());
-transports.push(
-	new winston.transports.File({ filename: process.env.LOGS_PATH })
-);
+if (process.env.LOGS_PATH)
+	transports.push(
+		new winston.transports.File({ filename: process.env.LOGS_PATH })
+	);
 
 module.exports = winston.createLogger({
 	format: combine(

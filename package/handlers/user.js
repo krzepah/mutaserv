@@ -1,11 +1,30 @@
 const polka = require('polka');
 const ramda = require('ramda');
 const send = require('@polka/send-type');
-const { mutations } = require('../mutations')(process.env.MUTATIONS)(ramda);
 const authMiddleware = require('../middlewares/auth');
 const authService = require('../services/auth');
 const bcryptService = require('../services/bcrypt');
+const dbService = require('../services/db');
 const User = require('../models/user');
+const logger = require('../config/logger');
+
+let mutations;
+
+const mutationReloader = (mod) => {
+	mutations = mod;
+	try {
+		dbService().drop();
+		dbService().sync();
+		logger.info('Dropped database');
+	}
+	catch (err) {
+		logger.error(err);
+	}
+};
+
+mutations = require('../mutations').watch(
+	process.env.MUTATIONS, mutationReloader
+);
 
 module.exports = polka()
 	.post('/login', async (req, res) => {
@@ -19,9 +38,8 @@ module.exports = polka()
 							email
 						}
 					});
-				if (!user) {
+				if (!user)
 					return send(res, 400, { msg: 'Bad Request: User not found' });
-				}
 				if (bcryptService().comparePassword(password, user.password)) {
 					const token = authService().issue({ id: user.id });
 					const userData = JSON.parse(user.data);
@@ -30,7 +48,7 @@ module.exports = polka()
 				return send(res, 401, { msg: 'Unauthorized' });
 			}
 			catch (err) {
-				console.log(err);
+				logger.error(err);
 				return send(res, 500, { msg: 'Internal server error' });
 			}
 		}
@@ -38,19 +56,19 @@ module.exports = polka()
 	})
 	.post('/sign', async (req, res) => {
 		const { body } = req;
-
 		if (body.password === body.password2) {
 			try {
 				const user = await User.create({
 					email: body.email,
-					password: body.password
+					password: body.password,
+					data: JSON.stringify(mutations.defaults)
 				});
 				const token = authService().issue({ id: user.id });
 				return send(res, 200, { token, user });
 			}
 			catch (err) {
-				console.log(err);
-				return send(res, 500, { msg: 'Internal server error' });
+				logger.error(JSON.stringify(err));
+				return send(res, 500, { ...ramda.map((e) => e.message, err.errors) });
 			}
 		}
 		return send(res, 400, { msg: 'Bad Request: Passwords don\'t match' });
@@ -64,7 +82,7 @@ module.exports = polka()
 		let state = JSON.parse(user.data);
 		ramda.map((act) => {
 			const key = Object.keys(act)[0];
-			const update = mutations[key](state, act[key]);
+			const update = mutations.mutations[key](state, act[key]);
 			state = assign(assign({}, state), update);
 		}, acts);
 
