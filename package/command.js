@@ -31,11 +31,6 @@ const loadEnv = (opts) => {
 	else if (!opts.skip)
 		config = require(process.env.MUTA_CONFIG);
 
-	if (opts.allow)
-		process.env.ALLOW = opts.allow;
-	else if (config && config.allow)
-		process.env.ALLOW = config.allow;
-
 	if (opts.serve)
 		process.env.SERVE = opts.serve;
 	else if (config && config.serve)
@@ -137,7 +132,6 @@ prog
 	.option('-m, --muts', 'Change the default muts	(default example.js)')
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
 	.option('-s, --serve', 'Serves folder passed as parameter')
-	.option('-a, --allow', 'Specifies which dependencies are allowed in mutations  (default ramda)')
 	.option('--skip', 'Skip any config file')
 	.option('-r, --reload', 'Mutations are reloaded and database purged when mutations files are updated (default false)')
 	.option('-e --log.env', 'Logs used environement before starting the server', false)

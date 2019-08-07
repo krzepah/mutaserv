@@ -48,14 +48,10 @@ const format = (path) => {
 		}, out.program.body
 	);
 
-	let allowed = ['ramda'];
-	if (process.env.ALLOWED)
-		allowed = process.env.ALLOWED.split(',');
-	logger.info('Allowed modules are : ' + JSON.stringify(allowed));
 	let imports = [];
 	ramda.map(
 		(node) => {
-			if (allowed.includes(node.source.value)) {
+			if (node.source.value === 'ramda') {
 				let identifiers = [];
 				if (node.specifiers.length) {
 					identifiers = ramda.filter(
