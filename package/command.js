@@ -43,10 +43,10 @@ const loadEnv = (opts) => {
 	else
 		process.env.RELAOD = false;
 
-	if (opts['log.mutations'])
-		process.env.LOGS_MUTATIONS = opts['log.mutations'] !== true;
-	else if (config && config.log && config.log.mutations != undefined)
-		process.env.LOGS_MUTATIONS = config.log.mutations !== 'true' && !(config.log.mutations);
+	if (opts['log.reducers'])
+		process.env.LOGS_MUTATIONS = opts['log.reducers'] !== true;
+	else if (config && config.log && config.log.reducers != undefined)
+		process.env.LOGS_MUTATIONS = config.log.reducers !== 'true' && !(config.log.reducers);
 	else
 		process.env.LOGS_MUTATIONS = false;
 
@@ -92,17 +92,17 @@ const loadEnv = (opts) => {
 	if (opts['log.args'])
 		logger.info('Loaded with following args : ' + JSON.stringify(opts, null, 4));
 
-	const mutations = (config, opts) => {
-		if (opts.mutations || opts.m) {
-			return path.resolve(process.cwd(), opts.mutations || opts.m);
+	const reducers = (config, opts) => {
+		if (opts.reducers || opts.m) {
+			return path.resolve(process.cwd(), opts.reducers || opts.m);
 		}
-		else if (config && config.mutations) {
-			return path.resolve(path.dirname(opts.c), config.mutations);
+		else if (config && config.reducers) {
+			return path.resolve(path.dirname(opts.c), config.reducers);
 		}
-		logger.warn('Loaded with test mutations (mutaserv run -h for help)');
-		return path.resolve(path.dirname(require.main.filename), '../test/mutations.js');
+		logger.warn('Loaded with test reducers (mutaserv run -h for help)');
+		return path.resolve(path.dirname(require.main.filename), '../test/reducers.js');
 	};
-	process.env.MUTATIONS = mutations(config, opts);
+	process.env.MUTATIONS = reducers(config, opts);
 
 	ramda.map(([key, def]) => process.env['DB_' + key.toUpperCase()] = dbval(
 		config, opts, key, def, 'db.'
@@ -133,11 +133,11 @@ prog
 	.option('-c, --conf', 'Provide path to custom package.json', 'package.json')
 	.option('-s, --serve', 'Serves folder passed as parameter')
 	.option('--skip', 'Skip any config file')
-	.option('-r, --reload', 'Mutations are reloaded and database purged when mutations files are updated (default false)')
+	.option('-r, --reload', 'Reducers are reloaded and database purged when files are updated (default false)')
 	.option('-e --log.env', 'Logs used environement before starting the server', false)
 	.option('--log.args', 'Log loaded args')
 	.option('--log.config', 'Log loaded configuration on start')
-	.option('--log.mutations', 'Logs the loaded mutations  (default false)')
+	.option('--log.reducers', 'Logs the loaded reducers  (default false)')
 	.option('--log.nostdout', 'If logs should\'t be displayed in stdout	 (default false)')
 	.option('--log.nocolor', 'If logs shouldn\'t use colors	(default false)')
 	.option('--log.path', 'Change the default logging file (default ./mutaserver.log)')
@@ -155,8 +155,8 @@ prog
 	.describe('Shows how a mutation file is loaded')
 	.action((src, opts) => {
 		process.env.DISPLAY_MUTATIONS = true;
-		const mutations = require('./mutations');
-		const format = mutations.format(src);
+		const reducers = require('./loader');
+		const format = reducers.format(src);
 		//eslint-disable-next-line
 		console.log(format);
 	});

@@ -22,7 +22,7 @@ const mutationReloader = (mod) => {
 	}
 };
 
-mutations = require('../mutations').watch(
+mutations = require('../loader').watch(
 	process.env.MUTATIONS, mutationReloader
 );
 
