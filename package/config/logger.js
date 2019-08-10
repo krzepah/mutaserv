@@ -19,7 +19,7 @@ if (process.env.LOGS_PATH)
 
 module.exports = winston.createLogger({
 	format: combine(
-		process.env.LOGS_COLOR === 'true' ? colorize() : label({ }),
+		process.env.LOGS_NOCOLOR !== 'false' ? colorize() : label({ }),
 		label({ }),
 		timestamp(),
 		format

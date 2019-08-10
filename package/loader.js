@@ -102,7 +102,7 @@ const format = (path) => {
 };
 
 let mod = null;
-const load = (path) => {
+const doLoad = (path) => {
 	let stringMod = '';
 	try {
 		stringMod = format(path);
@@ -112,30 +112,16 @@ const load = (path) => {
 		//eslint-disable-next-line
 		console.log(err);
 	}
-	logger.info('Loading mutations from ' + process.env.MUTATIONS);
-	if (process.env.LOGS_MUTATIONS)
+	logger.info('Loading reducers from ' + process.env.REDUCERS);
+	if (process.env.LOGS_REDUCERS)
 		logger.info(
 			'Loaded mutations : \n' +
 			stringMod
 		);
-	if (process.env.DISPLAY_MUTATIONS) {
+	if (process.env.DISPLAY_REDUCERS) {
 		//eslint-disable-next-line
 		console.log('Loaded mutations : \n' + stringMod);
 	}
-};
-
-const { spawn } = require('child_process');
-const triggerBuild = () => {
-	const build = spawn('npm', ['run', 'build']);
-	build.stdout.on('data', (data) => {
-	  logger.info(`build: ${data}`);
-	});
-	build.stderr.on('data', (data) => {
-	  logger.error(`stderr: ${data}`);
-	});
-	build.on('close', (code) => {
-	  logger.info(`child process exited with code ${code}`);
-	});
 };
 
 /**
@@ -143,30 +129,28 @@ const triggerBuild = () => {
  *  - Loads the new module internally
  *  - Calls listener with the new module
  */
-const watch = (path, listener) => {
+const load = (path, listener) => {
 	let mutationFolder;
 	if (path.substr(-3) === '.js') {
 		mutationFolder = path.split('/');
 		mutationFolder.pop();
 		mutationFolder = mutationFolder.join('/');
 	}
-	logger.info('Watching : ' + mutationFolder);
-	watcher.subscribe(mutationFolder, (err, events) => {
-		if (process.env.RELOAD) {
-			logger.info('Mutation folder got updated');
-			load(process.env.MUTATIONS);
-			listener(mod);
-		}
-		if (process.env.WATCH) {
-			triggerBuild();
-		}
-	});
-	load(path);
+	if (process.env.RELOAD) {
+		logger.info('Watching : ' + mutationFolder);
+		watcher.subscribe(mutationFolder, (err, events) => {
+			if (process.env.RELOAD) {
+				logger.info('Mutation folder got updated');
+				doLoad(process.env.REDUCERS);
+				listener(mod);
+			}
+		});
+	}
+	doLoad(path);
 	return mod;
 };
 
 module.exports = {
-	watch,
 	load,
 	format
 };

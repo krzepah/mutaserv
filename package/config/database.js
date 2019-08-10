@@ -2,9 +2,7 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const logger = require('./logger');
 
-const logging = process.env.DB_VERBOSE === 'true' ?
-	(msg) => logger.info(msg)
-	: false;
+const logging = process.env.DB_VERBOSE === 'false' ? false : (msg) => logger.info(msg);
 
 const database = new Sequelize(
 	process.env.DB_NAME,

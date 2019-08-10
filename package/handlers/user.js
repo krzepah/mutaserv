@@ -22,9 +22,7 @@ const mutationReloader = (mod) => {
 	}
 };
 
-mutations = require('../loader').watch(
-	process.env.MUTATIONS, mutationReloader
-);
+mutations = require('../loader').load(process.env.REDUCERS, mutationReloader);
 
 module.exports = polka()
 	.post('/login', async (req, res) => {
