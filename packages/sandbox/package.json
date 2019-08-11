@@ -1,0 +1,91 @@
+{
+  "private": true,
+  "name": "mutaserv-sandbox",
+  "license": "MIT",
+  "scripts": {
+    "start": "per-env",
+    "start:production": "npm run -s serve",
+    "start:development": "npm run -s dev",
+    "build": "preact build",
+    "serve": "preact build && preact serve",
+    "dev": "npm-run-all -p preact mutaserv",
+    "preact": "preact watch",
+    "mutaserv": "mutaserv run",
+	"load": "mutaserv load",
+    "lint": "eslint src",
+    "test": "jest"
+  },
+  "mutaserv": {
+    "port": "8000",
+    "reload": true,
+    "reducers": "./src/worker.js",
+    "log": {
+      "path": "./mutaserv.log"
+    },
+    "db": {
+      "verbose": false,
+      "dialect": "sqlite",
+      "path": "./mutaserv.db",
+      "name": "mutaserv",
+      "username": "mutaserv",
+      "password": "mutaserv",
+      "host": "localhost"
+    }
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-synacor"
+  },
+  "eslintIgnore": [
+    "build/*"
+  ],
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-synacor": "^2.0.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^21.2.1",
+    "mutaserv": "^0.0.4",
+    "per-env": "^1.0.2",
+    "preact-render-spy": "^1.2.1"
+  },
+  "dependencies": {
+    "mutasync": "^0.0.1",
+    "npm-run-all": "^4.1.5",
+    "preact": "^8.2.6",
+    "preact-compat": "^3.17.0",
+    "preact-render-to-string": "^4.1.0",
+    "preact-router": "^2.5.7",
+    "preact-virtual-list": "^0.3.1",
+    "stockroom": "krzepah/stockroom#temp",
+    "unistore": "krzepah/mutastore#temp",
+    "worker-loader": "^2.0.0"
+  },
+  "jest": {
+    "verbose": true,
+    "setupFiles": [
+      "<rootDir>/tests/__mocks__/browserMocks.js"
+    ],
+    "testRegex": "(/(__tests__|tests)/.*|(\\.|/)(test|spec))\\.jsx?$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/tests/__mocks__/*"
+    ],
+    "testURL": "http://localhost:8080",
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
+      "\\.(css|less|scss)$": "identity-obj-proxy",
+      "^./style$": "identity-obj-proxy",
+      "^preact$": "<rootDir>/node_modules/preact/dist/preact.min.js",
+      "^react$": "preact-compat",
+      "^react-dom$": "preact-compat",
+      "^create-react-class$": "preact-compat/lib/create-react-class",
+      "^react-addons-css-transition-group$": "preact-css-transition-group"
+    }
+  }
+}
