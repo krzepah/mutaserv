@@ -15,9 +15,7 @@
     "test": "eslint package/index.js && npm run build && jest",
     "size": "strip-json-comments --no-whitespace dist/storesync.js | gzip-size && bundlesize",
     "docs": "documentation readme package/index.js -q --section API && npm run -s fixreadme",
-    "fixreadme": "node -e 'var fs=require(\"fs\");fs.writeFileSync(\"README.md\", fs.readFileSync(\"README.md\", \"utf8\").replace(/^-   /gm, \"- \"))'",
-    "prepare": "npm t",
-    "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
+    "fixreadme": "node -e 'var fs=require(\"fs\");fs.writeFileSync(\"README.md\", fs.readFileSync(\"README.md\", \"utf8\").replace(/^-   /gm, \"- \"))'"
   },
   "eslintConfig": {
     "extends": "eslint-config-developit",

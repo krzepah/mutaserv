@@ -3,7 +3,7 @@
   "scripts": {
     "test": "lerna run test --stream",
 	"postinstall": "lerna exec yarn",
-    "pre-commit": "npm run test"
+    "pre-commit": "yarn test"
   },
   "devDependencies": {
     "lerna": "^3.16.4",

@@ -1,6 +1,6 @@
 {
   "name": "mutaserv",
-  "version": "0.0.4b",
+  "version": "0.0.4",
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "license": "MIT",
   "scripts": {
@@ -9,8 +9,7 @@
     "test": "npm run create-sqlite-db; cross-env LOGS_PATH=./test/tests.log REDUCERS=`pwd`/test/reducers.js jest --coverage; npm run drop-sqlite-db ; npm run coverage",
     "create-sqlite-db": "shx touch ./database.sqlite",
     "drop-sqlite-db": "shx rm ./database.sqlite",
-    "coverage": "coverage-badger -r coverage/clover.xml -d coverage",
-    "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm login && npm publish"
+    "coverage": "coverage-badger -r coverage/clover.xml -d coverage"
   },
   "eslintConfig": {
     "extends": "eslint-config-developit",
