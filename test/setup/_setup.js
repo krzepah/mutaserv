@@ -1,6 +1,6 @@
 
 const database = require('../../package/config/database');
-const { handler } = require('../../package/index');
+const { handler } = require('../../package/server');
 
 const beforeAction = async () => {
 	await database.authenticate();

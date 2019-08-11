@@ -8,10 +8,10 @@ const dbService = require('../services/db');
 const User = require('../models/user');
 const logger = require('../config/logger');
 
-let mutations;
+let reducers;
 
 const mutationReloader = (mod) => {
-	mutations = mod;
+	reducers = mod;
 	try {
 		dbService().drop();
 		dbService().sync();
@@ -22,7 +22,7 @@ const mutationReloader = (mod) => {
 	}
 };
 
-mutations = require('../loader').load(process.env.REDUCERS, mutationReloader);
+reducers = require('../loader')(process.env.REDUCERS, mutationReloader);
 
 module.exports = polka()
 	.post('/login', async (req, res) => {
@@ -59,7 +59,7 @@ module.exports = polka()
 				const user = await User.create({
 					email: body.email,
 					password: body.password,
-					data: JSON.stringify(mutations.defaults)
+					data: JSON.stringify(reducers.defaults)
 				});
 				const token = authService().issue({ id: user.id });
 				return send(res, 200, { token, user });
@@ -80,7 +80,7 @@ module.exports = polka()
 		let state = JSON.parse(user.data);
 		ramda.map((act) => {
 			const key = Object.keys(act)[0];
-			const update = mutations.mutations[key](state, act[key]);
+			const update = reducers.reducers[key](state, act[key]);
 			state = assign(assign({}, state), update);
 		}, acts);
 

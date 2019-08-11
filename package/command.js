@@ -90,7 +90,7 @@ const commands = {
 			dbOptions
 		]),
 		action: (opts) => {
-			const server = require('./index');
+			const server = require('./server');
 			server.listen(process.env.PORT, err => {
 				LOGGER.info('Mutaserv ' + pjson.version + ' starting on port ' + process.env.PORT);
 				if (err) throw err;
@@ -106,7 +106,7 @@ const commands = {
 		]),
 		action: (opts) => {
 			//eslint-disable-next-line
-			console.log(require('./loader').format(process.env.REDUCERS));
+			console.log('\n' + require('./formater')(process.env.REDUCERS));
 		}
 	},
 	env: {
