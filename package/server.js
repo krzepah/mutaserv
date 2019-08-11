@@ -1,9 +1,9 @@
 const polka = require('polka');
-const http = require('http');
+const httpServer = require('http');
 // const io = require('socket.io');
 const { json } = require('body-parser');
 const dbService = require('./services/db');
-const httpHandlers = require('./httpHandlers');
+const http = require('./http');
 const logger = require('./config/logger');
 
 dbService().start();
@@ -13,11 +13,11 @@ function log(req, res, next) {
 	next();
 }
 
-const server = http.createServer();
+const server = httpServer.createServer();
 
 const app = polka({ server })
 	.use(json())
-	.use('user', httpHandlers)
+	.use('user', http)
 	.use(log);
 
 if (process.env.SERVE !== 'false') {
