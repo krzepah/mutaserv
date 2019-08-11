@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const bcryptService = require('../services/bcrypt');
-const sequelize = require('../config/database');
+const bcryptService = require('./services/bcrypt');
+const sequelize = require('./config/database');
 
 const hooks = {
 	beforeCreate(user) {

@@ -1,4 +1,4 @@
-const authService = require('../services/auth');
+const authService = require('./services/auth');
 
 // usually: "Authorization: Bearer [token]" or "token: [token]"
 module.exports = (req, res, next) => {

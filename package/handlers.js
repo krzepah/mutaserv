@@ -1,12 +1,12 @@
 const polka = require('polka');
 const ramda = require('ramda');
 const send = require('@polka/send-type');
-const authMiddleware = require('../middlewares/auth');
-const authService = require('../services/auth');
-const bcryptService = require('../services/bcrypt');
-const dbService = require('../services/db');
-const User = require('../models/user');
-const logger = require('../config/logger');
+const authService = require('./services/auth');
+const bcryptService = require('./services/bcrypt');
+const dbService = require('./services/db');
+const authMiddleware = require('./auth');
+const User = require('./user');
+const logger = require('./config/logger');
 
 let reducers;
 
@@ -22,7 +22,7 @@ const mutationReloader = (mod) => {
 	}
 };
 
-reducers = require('../loader')(process.env.REDUCERS, mutationReloader);
+reducers = require('./loader')(process.env.REDUCERS, mutationReloader);
 
 module.exports = polka()
 	.post('/login', async (req, res) => {
