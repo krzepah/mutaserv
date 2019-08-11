@@ -8,16 +8,11 @@ const hooks = {
 	}
 };
 
-const tableName = 'users';
-
 const User = sequelize.define('User', {
-	email: {
-		type: Sequelize.STRING,
-		unique: true
-	},
+	email: { type: Sequelize.STRING, unique: true },
 	password: { type: Sequelize.STRING },
 	data: { type: Sequelize.STRING }
-}, { hooks, tableName });
+}, { hooks, tableName: 'users' });
 
 // eslint-disable-next-line
 User.prototype.toJSON = function () {

@@ -20,25 +20,24 @@ const createStore = () => {
 	return r;
 };
 
+const stringify = e => {
+	let v = Object.assign(e);
+	delete v.registerActions;
+	return JSON.stringify(v, (key, val) => (typeof val === 'function') ? ('' + val) : val, 4).replace(/\\n/g, '\n    ');
+};
+
 let mod = null;
 const doLoad = (path) => {
 	let stringMod = '';
 	try {
 		stringMod = format(path);
 		mod = requireFromString(stringMod)({ createSync, createStore }, ramda);
-		console.log(mod);
+		if (process.env.LOG_REDUCERS !== 'false') logger.info('Loaded store : ' + stringify(mod));
 	}
 	catch (err) {
 		//eslint-disable-next-line
 		logger.error('Load error: ' + err);
 		process.exit(1);
-	}
-	logger.info('Loading reducers from ' + process.env.REDUCERS);
-	if (process.env.LOGS_REDUCERS)
-		logger.info('Loaded mutations : \n' + stringMod);
-	if (process.env.DISPLAY_REDUCERS) {
-		//eslint-disable-next-line
-		console.log('Loaded mutations : \n' + stringMod);
 	}
 };
 

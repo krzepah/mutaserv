@@ -60,7 +60,8 @@ const logOptions = [
 	['--log.env', 'Log env', false, {
 		action: (opts) => { LOGGER.info('Loaded env is : ' + JSON.stringify(process.env)); }
 	}],
-	['--log.nocolor', 'If colors shouldn\'t be used', false]
+	['--log.nocolor', 'If colors shouldn\'t be used', false],
+	['--log.reducers', 'If reducers should be logged on start', false]
 ];
 
 const dbOptions = [
