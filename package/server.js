@@ -3,7 +3,7 @@ const http = require('http');
 // const io = require('socket.io');
 const { json } = require('body-parser');
 const dbService = require('./services/db');
-const handlers = require('./handlers');
+const httpHandlers = require('./httpHandlers');
 const logger = require('./config/logger');
 
 dbService().start();
@@ -17,7 +17,7 @@ const server = http.createServer();
 
 const app = polka({ server })
 	.use(json())
-	.use('user', handlers)
+	.use('user', httpHandlers)
 	.use(log);
 
 if (process.env.SERVE !== 'false') {
