@@ -1,6 +1,6 @@
 {
   "name": "mutasync",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "license": "MIT",
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "description": "Online state management",
@@ -73,7 +73,6 @@
     "npm-run-all": "^4.1.2",
     "strip-json-comments-cli": "^1.0.1"
   },
-  "peerDependencies": {},
   "dependencies": {
     "mutastore": "*"
   }

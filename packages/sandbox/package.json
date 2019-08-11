@@ -11,7 +11,7 @@
     "dev": "npm-run-all -p preact mutaserv",
     "preact": "preact watch",
     "mutaserv": "mutaserv run",
-	"load": "mutaserv load",
+    "load": "mutaserv load",
     "lint": "eslint src",
     "test": "jest"
   },
@@ -43,12 +43,12 @@
     "eslint-config-synacor": "^2.0.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^21.2.1",
-    "mutaserv": "^0.0.4",
+    "mutaserv": "^0.0.5",
     "per-env": "^1.0.2",
     "preact-render-spy": "^1.2.1"
   },
   "dependencies": {
-    "mutasync": "^0.0.1",
+    "mutasync": "^0.0.5",
     "npm-run-all": "^4.1.5",
     "preact": "^8.2.6",
     "preact-compat": "^3.17.0",
@@ -87,5 +87,6 @@
       "^create-react-class$": "preact-compat/lib/create-react-class",
       "^react-addons-css-transition-group$": "preact-css-transition-group"
     }
-  }
+  },
+  "version": "0.0.5"
 }
