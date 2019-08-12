@@ -1,8 +1,6 @@
 import createStore from 'stockroom/worker';
-import { merge, concat } from 'ramda';
 import createSync from 'mutasync';
-
-const sync = createSync();
+import { merge, concat } from 'ramda';
 
 const defaults = {
 	count: 0,
@@ -10,7 +8,8 @@ const defaults = {
 	elementsIds: []
 };
 
-let store = createStore(defaults);
+const store = createStore(defaults);
+const sync = createSync('http://localhost:8000', defaults);
 
 store.registerActions(sync.auth);
 store.registerActions( store => ({

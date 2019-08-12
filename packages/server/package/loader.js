@@ -2,7 +2,6 @@ const ramda = require('ramda');
 const requireFromString = require('require-from-string');
 const process = require('process');
 const logger = require('./config/logger');
-const watcher = require('@parcel/watcher');
 const format = require('./formater');
 
 const createSync = () => ({
@@ -53,7 +52,8 @@ module.exports = (path, listener) => {
 		mutationFolder.pop();
 		mutationFolder = mutationFolder.join('/');
 	}
-	if (process.env.RELOAD) {
+	if (process.env.RELOAD !== 'false') {
+		const watcher = require('@parcel/watcher');
 		logger.info('Watching : ' + mutationFolder);
 		watcher.subscribe(mutationFolder, (err, events) => {
 			if (process.env.RELOAD) {

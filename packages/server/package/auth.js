@@ -35,10 +35,13 @@ module.exports = (req, res, next) => {
 
 	return authService().verify(tokenToVerify, (err, thisToken) => {
 		if (err) {
-			res.statusCode = 401;
-			res.end({ err });
+			  let rerr = new Error('Unauthorized');
+			  rerr.code = 401;
+			  next(rerr);
 		}
-		req.token = thisToken;
-		return next();
+		else {
+			req.token = thisToken;
+			next();
+		}
 	});
 };

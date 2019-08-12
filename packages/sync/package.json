@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Patrick Borowy <patrick@krzepah.net>",
   "description": "Online state management",
-  "source": "package/index.js",
+  "source": "index.js",
   "module": "dist/storesync.es.js",
   "main": "dist/storesync.js",
   "umd:main": "dist/storesync.umd.js",
@@ -12,9 +12,9 @@
   "scripts": {
     "build": "npm-run-all --silent -p build:main -s size docs",
     "build:main": "microbundle",
-    "test": "eslint package/index.js && npm run build && jest",
+    "test": "eslint index.js && npm run build && jest",
     "size": "strip-json-comments --no-whitespace dist/storesync.js | gzip-size && bundlesize",
-    "docs": "documentation readme package/index.js -q --section API && npm run -s fixreadme",
+    "docs": "documentation readme index.js -q --section API && npm run -s fixreadme",
     "fixreadme": "node -e 'var fs=require(\"fs\");fs.writeFileSync(\"README.md\", fs.readFileSync(\"README.md\", \"utf8\").replace(/^-   /gm, \"- \"))'"
   },
   "eslintConfig": {
@@ -49,7 +49,7 @@
     ]
   },
   "files": [
-    "package/index.js",
+    "index.js",
     "dist"
   ],
   "keywords": [

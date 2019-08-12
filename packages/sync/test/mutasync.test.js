@@ -1,5 +1,5 @@
 
-import mutasync from '../package/index';
+import mutasync from '../index';
 
 describe('sync object', () => {
 	beforeEach(() => fetch.resetMocks());

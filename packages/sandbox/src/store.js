@@ -10,6 +10,6 @@ else {
 	store = createStore(require('./worker').default.store);
 }
 
-store.subscribe((state, action, update, params) => sync.listen(action, params));
+store.subscribe((state, action, update, params) => sync.listen(state, action, params));
 
 export default store;

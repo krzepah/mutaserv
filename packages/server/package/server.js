@@ -1,5 +1,5 @@
 const polka = require('polka');
-const httpServer = require('http');
+// const httpServer = require('http');
 // const io = require('socket.io');
 const { json } = require('body-parser');
 const dbService = require('./services/db');
@@ -8,17 +8,21 @@ const logger = require('./config/logger');
 
 dbService().start();
 
-function log(req, res, next) {
-	logger.info(req.method + ' ' + req.url + ' ' + res.statusCode);
+// const server = httpServer.createServer();
+
+const log = (req, res, next) => {
+	logger.info(req.method + ' ' + req.url);
 	next();
-}
+};
 
-const server = httpServer.createServer();
-
-const app = polka({ server })
+const app = polka({
+	onError: (err, req, res, next) => {
+		logger.error('onError: ' + err);
+	}
+})
+	.use('/', log)
 	.use(json())
-	.use('user', http)
-	.use(log);
+	.use('user', http);
 
 if (process.env.SERVE !== 'false') {
 	logger.info('Serving files from ' + process.env.SERVE);

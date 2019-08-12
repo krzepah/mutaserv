@@ -23,7 +23,6 @@ const mutationReloader = (mod) => {
 };
 
 reducers = require('./loader')(process.env.REDUCERS, mutationReloader);
-
 module.exports = polka()
 	.post('/login', async (req, res) => {
 		const { email, password } = req.body;
@@ -83,7 +82,6 @@ module.exports = polka()
 			const update = reducers.reducers[key](state, act[key]);
 			state = assign(assign({}, state), update);
 		}, acts);
-
 		user.data = JSON.stringify(state);
 		user.save();
 		return send(res, 200, { msg: 'Ok !' });

@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "test": "lerna run test --stream",
-	"postinstall": "lerna exec yarn",
+	"install": "lerna exec yarn",
     "pre-commit": "yarn test"
   },
   "devDependencies": {

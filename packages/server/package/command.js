@@ -91,8 +91,8 @@ const commands = {
 			dbOptions
 		]),
 		action: (opts) => {
-			const server = require('./server');
-			server.listen(process.env.PORT, err => {
+			const app = require('./server');
+			app.listen(process.env.PORT, err => {
 				LOGGER.info('Mutaserv ' + pjson.version + ' starting on port ' + process.env.PORT);
 				if (err) throw err;
 			});
@@ -141,7 +141,7 @@ map(
 			},
 			command.options
 		);
-		
+
 		// run opts and config over specified options and command and calls command's action
 		com.action((opts) => {
 			// currently, there is no other way to retrieve "command" here
@@ -174,7 +174,7 @@ map(
 								val = option[3].generic.opts(val);
 							process.env[envKey] = val;
 						}
-						else if (path(absoluteSpecifier.split('.'), CONFIG)) {
+						else if (path(absoluteSpecifier.split('.'), CONFIG) !== undefined) {
 							// Checks if it exists in CONFIG,
 							// dot access is resolved using path, (eg : log configuration are stored in "log" object)
 							val = path(absoluteSpecifier.split('.'), CONFIG);
