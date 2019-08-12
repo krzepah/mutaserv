@@ -8,7 +8,7 @@
       "nostdout": false
     },
     "database": {
-      "verbose": true,
+      "verbose": false,
       "dialect": "sqlite",
       "path": "./test.db",
       "name": "mutaserv",

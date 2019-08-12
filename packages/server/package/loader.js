@@ -31,7 +31,7 @@ const doLoad = (path) => {
 	try {
 		stringMod = format(path);
 		mod = requireFromString(stringMod)({ createSync, createStore }, ramda);
-		if (process.env.LOG_REDUCERS !== 'false') logger.info('Loaded store : ' + stringify(mod));
+		if (process.env.LOG_REDUCERS === 'true') logger.info('Loaded store : ' + stringify(mod));
 	}
 	catch (err) {
 		//eslint-disable-next-line
@@ -52,7 +52,7 @@ module.exports = (path, listener) => {
 		mutationFolder.pop();
 		mutationFolder = mutationFolder.join('/');
 	}
-	if (process.env.RELOAD !== 'false') {
+	if (process.env.RELOAD === 'true') {
 		const watcher = require('@parcel/watcher');
 		logger.info('Watching : ' + mutationFolder);
 		watcher.subscribe(mutationFolder, (err, events) => {
