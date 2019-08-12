@@ -8,10 +8,9 @@ const authMiddleware = require('./auth');
 const User = require('./user');
 const logger = require('./config/logger');
 
-let reducers;
-
+let store;
 const mutationReloader = (mod) => {
-	reducers = mod;
+	store = mod;
 	try {
 		dbService().drop();
 		dbService().sync();
@@ -21,8 +20,8 @@ const mutationReloader = (mod) => {
 		logger.error(err);
 	}
 };
+store = require('./loader')(process.env.REDUCERS, mutationReloader);
 
-reducers = require('./loader')(process.env.REDUCERS, mutationReloader);
 module.exports = polka()
 	.post('/login', async (req, res) => {
 		const { email, password } = req.body;
@@ -58,14 +57,16 @@ module.exports = polka()
 				const user = await User.create({
 					email: body.email,
 					password: body.password,
-					data: JSON.stringify(reducers.defaults)
+					data: JSON.stringify(store.defaults)
 				});
 				const token = authService().issue({ id: user.id });
 				return send(res, 200, { token, user });
 			}
 			catch (err) {
-				logger.error(JSON.stringify(err));
-				return send(res, 500, { ...ramda.map((e) => e.message, err.errors) });
+				if (err.errors)
+					return send(res, 400, { ...ramda.map((e) => e.message, err.errors) });
+				logger.error('' + err);
+				return send(res, 500, 'An error occured');
 			}
 		}
 		return send(res, 400, { msg: 'Bad Request: Passwords don\'t match' });
@@ -79,7 +80,7 @@ module.exports = polka()
 		let state = JSON.parse(user.data);
 		ramda.map((act) => {
 			const key = Object.keys(act)[0];
-			const update = reducers.reducers[key](state, act[key]);
+			const update = store.reducers[key](state, act[key]);
 			state = assign(assign({}, state), update);
 		}, acts);
 		user.data = JSON.stringify(state);

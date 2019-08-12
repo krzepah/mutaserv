@@ -77,7 +77,12 @@ const dbOptions = [
 const serverOptions = [
 	['-p --port', 'Which port should be used', 9000],
 	['-s --serve', 'Serves folder', false],
-	['-r --reload', 'Reload reducers on change', true]
+	['-r --reload', 'Reload reducers on change', true],
+	['-t --secret', 'specifies secret to be used for JWT', 'secret', {
+		always: () => process.env.SECRET === 'secret' ? LOGGER.warn(
+			'Using default JWT secret, it is NOT suited for production.'
+		) : null
+	}]
 ];
 
 const commands = {
@@ -153,6 +158,8 @@ map(
 			}
 			// some option can trigger actions ran after env setup
 			let actors = [];
+			// some actions require to be always triggered (checks & such)
+			let always = [];
 			// Sets up options in env taking params by priority : opts > conf > env
 			map(
 				(option) => {
@@ -183,20 +190,25 @@ map(
 								val = option[3].generic.config(val);
 							process.env[envKey] = val;
 						}
-						else
+						else if (process.env[envKey] === undefined)
 							process.env[envKey] = val = option[2]; // default
 						// call .afterSetup
 						if (option.length >= 4 && option[3].afterSetup)
 							option[3].afterSetup(val);
 						// if called option has an .action, register it
-						if (option.length >= 4 && option[3].action && process.env[envKey] !== 'false')
+						if (option.length >= 4 && option[3].action && process.env[envKey] !== 'false' && process.env[envKey])
 							actors.push(option[3].action);
+						// if option has a .always, register it
+						if (option.length >= 4 && option[3].always)
+							always.push(option[3].always);
 					}
 				},
 				commands[command].options
 			);
 			// call registered actors
 			map((actor) => actor(opts), actors);
+			// call registered always
+			map((alw) => alw(opts), always);
 			// and finally call the action
 			commands[command].action(opts);
 		});

@@ -7,9 +7,9 @@ const format = require('./formater');
 const createSync = () => ({
 	auth: (s) => ({ })
 });
-const createStore = () => {
+const createStore = (defaults) => {
 	let store = { };
-	let r = { reducers: { } };
+	let r = { reducers: { }, defaults };
 	r.registerActions = (
 		actions
 	) => {

@@ -1,4 +1,5 @@
 const authService = require('./services/auth');
+const logger = require('./config/logger');
 
 // usually: "Authorization: Bearer [token]" or "token: [token]"
 module.exports = (req, res, next) => {
@@ -35,9 +36,10 @@ module.exports = (req, res, next) => {
 
 	return authService().verify(tokenToVerify, (err, thisToken) => {
 		if (err) {
-			  let rerr = new Error('Unauthorized');
-			  rerr.code = 401;
-			  next(rerr);
+			let rerr = new Error('Unauthorized');
+			rerr.code = 401;
+			next(rerr);
+			logger.error(err);
 		}
 		else {
 			req.token = thisToken;
