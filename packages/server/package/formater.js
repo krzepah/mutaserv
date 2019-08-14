@@ -8,9 +8,7 @@ const getAst = (path) => {
 	let contents;
 	try {
 		contents = fs.readFileSync(path, 'utf8');
-		return parse(
-			contents, { sourceType: 'module' }
-		).program;
+		return parse(contents, { sourceType: 'module' }).program;
 	}
 	catch (err) {
 		logger.error(err);

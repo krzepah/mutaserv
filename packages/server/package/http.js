@@ -23,60 +23,48 @@ const mutationReloader = (mod) => {
 store = require('./loader')(process.env.REDUCERS, mutationReloader);
 
 module.exports = polka()
-	.post('/login', async (req, res) => {
-		const { email, password } = req.body;
-
-		if (email && password) {
-			try {
-				const user = await User
-					.findOne({
-						where: {
-							email
-						}
-					});
-				if (!user)
-					return send(res, 400, { msg: 'Bad Request: User not found' });
-				if (bcryptService().comparePassword(password, user.password)) {
-					const token = authService().issue({ id: user.id });
-					const userData = JSON.parse(user.data);
-					return send(res, 200, ({ token, user, ...userData }));
-				}
-				return send(res, 401, { msg: 'Unauthorized' });
-			}
-			catch (err) {
-				logger.error(err);
-				return send(res, 500, { msg: 'Internal server error' });
-			}
-		}
-		return send(res, 400, { msg: 'Bad Request: Email or password is wrong' });
-	})
-	.post('/sign', async (req, res) => {
-		const { body } = req;
-		if (body.password === body.password2) {
-			try {
-				const user = await User.create({
-					email: body.email,
-					password: body.password,
-					data: JSON.stringify(store.defaults)
-				});
+	.post('/login', async ({ body }, res) => {
+		if (!body.username) return send(res, 401, { failure: 'Username is mandatory' });
+		if (!body.password) return send(res, 401, { failure: 'Password is mandatory' });
+		const { username, password } = body;
+		try {
+			const user = await User.findOne({ where: { username } });
+			if (!user) return send(res, 400, { failure: 'User not found' });
+			if (bcryptService().comparePassword(password, user.password)) {
 				const token = authService().issue({ id: user.id });
-				return send(res, 200, { token, user });
-			}
-			catch (err) {
-				if (err.errors)
-					return send(res, 400, { ...ramda.map((e) => e.message, err.errors) });
-				logger.error('' + err);
-				return send(res, 500, 'An error occured');
+				const userData = JSON.parse(user.data);
+				return send(res, 200, ({ token, user, ...userData }));
 			}
 		}
-		return send(res, 400, { msg: 'Bad Request: Passwords don\'t match' });
+		catch (err) {
+			logger.error(err);
+			return send(res, 500, { failure: 'Internal server error' });
+		}
+		return send(res, 401, { failure: 'Username or password is wrong' });
+	})
+	.post('/sign', async ({ body }, res) => {
+		if (!body.username) return send(res, 401, { failure: 'Username is mandatory.' });
+		if (!body.password) return send(res, 401, { failure: 'Password is mandatory.' });
+		if (body.password != body.verification) return send(res, 401, { failure: 'Passwords don\'t match' });
+		try {
+			const user = await User.create({
+				username: body.username,
+				password: body.password,
+				data: JSON.stringify(store.defaults)
+			});
+			const token = authService().issue({ id: user.id });
+			return send(res, 200, { token, user });
+		}
+		catch (err) {
+			if (err.errors) return send(res, 400, { failure: { ...ramda.map((e) => e.message, err.errors) } });
+			logger.error('' + err);
+			return send(res, 500, 'An error occured');
+		}
 	})
 	.use('/mutate', authMiddleware)
-	.post('/mutate', async (req, res) => {
-		const { assign } = Object;
-		const { id } = req.token;
+	.post('/mutate', async ({ body, token }, res) => {
+		const { assign } = Object; const { id } = token; const { acts } = body;
 		const user = await User.findOne({ where: { ...id } });
-		const { acts } = req.body;
 		let state = JSON.parse(user.data);
 		ramda.map((act) => {
 			const key = Object.keys(act)[0];
@@ -88,8 +76,8 @@ module.exports = polka()
 		return send(res, 200, { msg: 'Ok !' });
 	})
 	.use('/get-state', authMiddleware)
-	.get('/get-state', async (req, res) => {
-		const { id } = req.token;
+	.get('/get-state', async ({ token }, res) => {
+		const { id } = token;
 		const user = await User.findOne({ where: { ...id } });
 		return send(res, 200, user.data, { 'content-type': 'application/json' });
 	});

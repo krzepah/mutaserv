@@ -5,7 +5,7 @@ const logger = require('./config/logger');
 const format = require('./formater');
 
 const createSync = () => ({
-	auth: (s) => ({ })
+	sync: () => {}
 });
 const createStore = (defaults) => {
 	let store = { };
@@ -42,7 +42,7 @@ const doLoad = (path) => {
 
 /**
  * Watches path for changes
- *  - Loads the new module internally
+ *  - Loads the new module
  *  - Calls listener with the new module
  */
 module.exports = (path, listener) => {

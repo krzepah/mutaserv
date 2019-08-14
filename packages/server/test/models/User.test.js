@@ -16,14 +16,14 @@ afterAll(() => {
 
 beforeEach(async () => {
 	user = await User.create({
-		email: 'martin@mail.com',
+		username: 'martin@mail.com',
 		password: 'securepassword'
 	});
 });
 
 test('User is created correctly', async () => {
 	const sendUser = user.toJSON();
-	expect(user.email).toBe('martin@mail.com');
+	expect(user.username).toBe('martin@mail.com');
 	expect(sendUser.password).toBeFalsy();
 
 	await user.destroy();
@@ -31,10 +31,10 @@ test('User is created correctly', async () => {
 
 test('User is updated correctly', async () => {
 	await user.update({
-		email: 'peter@mail.com'
+		username: 'peter@mail.com'
 	});
 
-	expect(user.email).toBe('peter@mail.com');
+	expect(user.username).toBe('peter@mail.com');
 
 	await user.destroy();
 });

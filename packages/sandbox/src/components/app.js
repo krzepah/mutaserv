@@ -5,7 +5,8 @@ import Header from './header';
 
 // Code-splitting is automated for routes
 import List from '../routes/list';
-import Auth from '../routes/auth';
+import Login from '../routes/login';
+import Sign from '../routes/sign';
 
 import { Provider } from 'unistore/preact';
 
@@ -29,7 +30,8 @@ export default class App extends Component {
 					<Header />
 					<Router onChange={this.handleRoute}>
 						<List path="/" />
-						<Auth path="/auth" />
+						<Login path="/login" />
+						<Sign path="/sign" />
 					</Router>
 				</div>
 			</Provider>

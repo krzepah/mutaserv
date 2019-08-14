@@ -5,6 +5,7 @@ const { json } = require('body-parser');
 const dbService = require('./services/db');
 const http = require('./http');
 const logger = require('./config/logger');
+const cors = require('cors');
 
 dbService().start();
 
@@ -15,16 +16,13 @@ const log = (req, res, next) => {
 	next();
 };
 
-const app = polka({
-	onError: (err, req, res, next) => {
-		logger.error('onError: ' + err);
-	}
-})
+const app = polka()
+	.use(cors({ origin: process.env.ORIGIN, optionsSuccessStatus: 200 }))
 	.use('/', log)
 	.use(json())
 	.use('user', http);
 
-if (process.env.SERVE) {
+if (process.env.SERV !== undefined && process.env.SERV !== 'false') {
 	logger.info('Serving files from ' + process.env.SERVE);
 	const serve = require('sirv')(process.env.SERVE);
 	app.use(serve);

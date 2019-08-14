@@ -1,51 +1,44 @@
-const headers = {
-	Accept: 'application/json',
-	'Content-Type': 'application/json'
-};
-
-export default (host, defaults) => {
-	let unsynced = [];
-	let applying = false;
-	let delay = 100;
-
-	const auth = store => ({
-		login: ({ user }) => ({ user }),
-		logout: () => ({ user: { } })
-	});
-
-	const errorHandler = err => { delay += 10000; };
-
-	/**
-	 * Should be set in a store.subscribe.
-	 * Saves state using storage and batch update
-	 */
-	const listen = (state, action, params) => {
-		if (state && typeof(action) === 'string' && params) {
-			unsynced.push([action, params]);
-			if (!applying) {
-				applying = true;
-				setTimeout( () => {
-					console.log('fetching...');
-					fetch(host + '/user/mutate', {
-						headers,
-						method: 'POST',
-						body: JSON.stringify({ token: state.token, actions: unsynced })
-					})
-						.then( (res) => res.json() ).then( (res) => {
-							unsynced = [];
-							delay = 100;
-							applying = false;
-						})
-						.catch( (err) => errorHandler );
-				}, delay);
-			}
+export default (host, store) => {
+	let authenticated = false; let dflt = store.getState();
+	const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+	const _w = (f, b) => typeof(window) !== 'undefined' ? f() : b;
+	const req = (endpoint, method, s, f, e) => (
+		params, onSuccess, onFailure, onError
+	) => fetch(host + endpoint, {
+		headers, method, body: JSON.stringify(params)
+	}).then( res => res.json() ).then( res => {
+		res.failure ? onFailure ? onFailure(res) : null : onSuccess ? onSuccess(res) : null;
+		res.failure ? f ? f(res) : null : s ? s(res) : null;
+	}).catch( err => { e(err); onError(err); });
+	return ({
+		sync: (ws) => {
+			let delay = 100; let applying = false;
+			let unsynced = _w(() => JSON.parse(localStorage.getItem('unsynced')), []);
+			unsynced = unsynced === null ? [] : unsynced;
+			_w(() => ws.setState(JSON.parse(localStorage.getItem('saved')), true));
+			store = ws;
+			const sync = () => {
+				if (!applying && authenticated) {
+					applying = true; setTimeout( () => req('/user/mutate', 'POST', (success) => {
+						unsynced = []; delay = 100; applying = false;
+					}, (failure) => {}, (error) => { delay += 10000; })(
+						{ token: store.state.token, unsynced }), delay);
+				}
+			};
+			ws.subscribe((state, action, update, params) => {
+				if (state && typeof(action) === 'string' && params && !params.mutasync) {
+					unsynced.push([action, params]);
+					_w(() => localStorage.setItem('unsynced', JSON.stringify(unsynced)));
+					_w(() => localStorage.setItem('saved', JSON.stringify(state)));
+					sync();
+				}
+			});
+		},
+		login: req('/user/login', 'POST', (success) => store.setState({ ...success, mutasync: true })),
+		sign: req('/user/sign', 'POST', (success) => store.setState({ ...success, mutasync: true })),
+		logout: () => {
+			_w(localStorage.setItem('saved', JSON.stringify(dflt)));
+			store.setState(dflt, true);
 		}
-	};
-
-	return {
-		retrieveLocal: () => {},
-		clearLocal: () => {},
-		auth,
-		listen
-	};
+	});
 };

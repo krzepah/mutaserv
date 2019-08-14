@@ -20,7 +20,7 @@ test('User | create', async () => {
 		.post('/user/sign')
 		.set('Accept', /json/)
 		.send({
-			email: 'martin@mail.com',
+			username: 'martin@mail.com',
 			password: 'securepassword',
 			password2: 'securepassword'
 		})
@@ -31,14 +31,14 @@ test('User | create', async () => {
 	const user = await User.findByPk(res.body.user.id);
 
 	expect(user.id).toBe(res.body.user.id);
-	expect(user.email).toBe(res.body.user.email);
+	expect(user.username).toBe(res.body.user.username);
 
 	await user.destroy();
 });
 
 test('User | login', async () => {
 	const user = await User.create({
-		email: 'martin@mail.com',
+		username: 'martin@mail.com',
 		password: 'securepassword'
 	});
 
@@ -46,7 +46,7 @@ test('User | login', async () => {
 		.post('/user/login')
 		.set('Accept', /json/)
 		.send({
-			email: 'martin@mail.com',
+			username: 'martin@mail.com',
 			password: 'securepassword'
 		})
 		.expect(200);
@@ -60,7 +60,7 @@ test('User | login', async () => {
 
 test('User | get-state (auth)', async () => {
 	const user = await User.create({
-		email: 'martin@mail.com',
+		username: 'martin@mail.com',
 		password: 'securepassword',
 		data: JSON.stringify({ elements: {}, elementsIds: [] })
 	});
@@ -69,7 +69,7 @@ test('User | get-state (auth)', async () => {
 		.post('/user/login')
 		.set('Accept', /json/)
 		.send({
-			email: 'martin@mail.com',
+			username: 'martin@mail.com',
 			password: 'securepassword'
 		})
 		.expect(200);
@@ -90,7 +90,7 @@ test('User | get-state (auth)', async () => {
 
 test('User | mutate (auth)', async () => {
 	const user = await User.create({
-		email: 'martin@mail.com',
+		username: 'martin@mail.com',
 		password: 'securepassword',
 		data: JSON.stringify({ elements: {}, elementsIds: [] })
 	});
@@ -99,7 +99,7 @@ test('User | mutate (auth)', async () => {
 		.post('/user/login')
 		.set('Accept', /json/)
 		.send({
-			email: 'martin@mail.com',
+			username: 'martin@mail.com',
 			password: 'securepassword'
 		})
 		.expect(200);

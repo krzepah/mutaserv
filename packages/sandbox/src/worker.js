@@ -9,9 +9,8 @@ const defaults = {
 };
 
 const store = createStore(defaults);
-const sync = createSync('http://localhost:8000', defaults);
+const sync = createSync('http://localhost:8000', store);
 
-store.registerActions(sync.auth);
 store.registerActions( store => ({
 	newElement: ({ elements, elementsIds }, { text, newId }) => ({
 		elements: merge({ [newId]: { text, id: newId } }, elements),
@@ -19,7 +18,4 @@ store.registerActions( store => ({
 	})
 }));
 
-export default {
-	store,
-	sync
-};
+export default { store, sync };

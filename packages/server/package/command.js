@@ -78,6 +78,7 @@ const serverOptions = [
 	['-p --port', 'Which port should be used', 9000],
 	['-s --serve', 'Serves folder', false],
 	['-r --reload', 'Reload reducers on change', true],
+	['-o --origin', 'Accepted CORS origin', 'localhost'],
 	['-t --secret', 'specifies secret to be used for JWT', 'secret', {
 		always: () => process.env.SECRET === 'secret' ? LOGGER.warn(
 			'Using default JWT secret, it is NOT suited for production.'
