@@ -2,6 +2,7 @@ import { route } from 'preact-router';
 import { h, Component } from 'preact';
 import linkState from 'linkstate';
 import style from './style';
+import Helmet from 'preact-helmet';
 
 import { connect } from 'unistore/preact';
 
@@ -21,6 +22,7 @@ class AuthBase extends Component {
 
 	render = ({}, { username, password, verification }) => (
 		<form class={style.auth} onSubmit={this.sign}>
+			<Helmet title="Mutaserv - sign" />
 			<label for="username">Username</label>{' '}
 			<input id="username" placeholder="Username" type="text" onInput={linkState(this, 'username')} />
 			<br />
