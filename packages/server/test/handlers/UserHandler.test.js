@@ -22,7 +22,7 @@ test('User | create', async () => {
 		.send({
 			username: 'martin@mail.com',
 			password: 'securepassword',
-			password2: 'securepassword'
+			verification: 'securepassword'
 		})
 		.expect(200);
 

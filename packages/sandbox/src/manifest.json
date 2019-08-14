@@ -1,6 +1,6 @@
 {
-  "name": "foo",
-  "short_name": "foo",
+  "name": "Mutaserv sandbox",
+  "short_name": "Mutaserv sandbox",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

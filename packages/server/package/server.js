@@ -22,7 +22,7 @@ const app = polka()
 	.use(json())
 	.use('user', http);
 
-if (process.env.SERV !== undefined && process.env.SERV !== 'false') {
+if (process.env.SERVE !== undefined && process.env.SERVE !== 'false') {
 	logger.info('Serving files from ' + process.env.SERVE);
 	const serve = require('sirv')(process.env.SERVE);
 	app.use(serve);

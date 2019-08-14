@@ -1,8 +1,6 @@
 import worker from './worker';
 const { sync } = worker;
 
-console.log(sync);
-
 let store;
 if (typeof(window) !== 'undefined') {
 	const createStore = require('stockroom').default;
