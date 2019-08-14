@@ -43,8 +43,8 @@ module.exports = polka()
 		return send(res, 401, { failure: 'Username or password is wrong' });
 	})
 	.post('/sign', async ({ body }, res) => {
-		if (!body.username) return send(res, 401, { failure: 'Username is mandatory.' });
-		if (!body.password) return send(res, 401, { failure: 'Password is mandatory.' });
+		if (!body.username) return send(res, 401, { failure: 'Username is mandatory' });
+		if (!body.password) return send(res, 401, { failure: 'Password is mandatory' });
 		if (body.password != body.verification) return send(res, 401, { failure: 'Passwords don\'t match' });
 		try {
 			const user = await User.create({

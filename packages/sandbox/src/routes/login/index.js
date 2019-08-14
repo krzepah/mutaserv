@@ -31,8 +31,8 @@ class AuthBase extends Component {
 			<button>Submit</button>
 			<br />
 			<br />
-			{ this.state.failure }
-			{ this.state.error }
+			<div id="failure">{ this.state.failure }</div>
+			<div id="error">{ this.state.error }</div>
 		</form>
 	)
 }

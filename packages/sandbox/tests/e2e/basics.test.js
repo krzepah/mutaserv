@@ -6,13 +6,6 @@ const click = (selector, customPage = page) => customPage.evaluate(selector => {
 	document.querySelector(selector).click();
 }, selector);
 
-describe('Mutaserv', () => {
-	beforeAll(async () => await page.goto('http://localhost:8000'));
-	it('should be titled "Mutaserv sandbox"', async () => {
-		await expect(page.title()).resolves.toMatch('Mutaserv sandbox');
-	});
-});
-
 const goTo = async (selector) => {
 	await page.goto('http://localhost:8000/');
 	await page.waitForSelector(selector);
@@ -23,8 +16,22 @@ const goTo = async (selector) => {
 	await new Promise( f => setTimeout(f, 10));
 };
 
+const getText = async selector => {
+	const element = await page.$(selector);
+	const text = await page.evaluate(element => element.textContent, element);
+	return text;
+};
 
-const testForm = (description, type, fields) =>
+describe('Mutaserv sandbox', () => {
+	beforeAll(async () => await page.goto('http://localhost:8000'));
+	it('should be titled "Mutaserv sandbox"', async () => {
+		await expect(page.title()).resolves.toMatch('Mutaserv sandbox');
+	});
+	it('should have an input', async () => await page.waitForSelector('input'));
+	it('should have a button', async () => await page.waitForSelector('button'));
+});
+
+const testForm = (description, type, fields, extra) =>
 	describe(description, () => {
 		beforeAll(async () => { await goTo('a[href="/' + type + '"]'); });
 		it('should be titled "Mutaserv - ' + type + '"', async () => await expect(
@@ -34,7 +41,49 @@ const testForm = (description, type, fields) =>
 			for (let field of fields) await page.waitForSelector('input[id="' + field + '"]');
 		});
 		it('should have a button', async () => await page.waitForSelector('button'));
+		it('should have an error div', async () => await page.waitForSelector('div[id="error"]'));
+		it('should have an empty error div', async () => {
+			const text = await getText('div[id="error"]');
+			await expect(text).toBe('');
+		});
+		it('should have an failure div', async () => await page.waitForSelector('div[id="failure"]'));
+		it('should have an empty failure div', async () => {
+			const text = await getText('div[id="failure"]');
+			await expect(text).toBe('');
+		});
+		it('should have a mandatory username field', async () => {
+			await click('button');
+			await new Promise( f => setTimeout(f, 10));
+			const text = await getText('div[id="failure"]');
+			await expect(text).toBe('Username is mandatory');
+		});
+		it('should have a mandatory password field', async () => {
+			await page.type('#username', 'username');
+			await click('button');
+			await new Promise( f => setTimeout(f, 10));
+			const text = await getText('div[id="failure"]');
+			await expect(text).toBe('Password is mandatory');
+		});
+		if (extra !== undefined) extra();
 	});
 
-testForm('Mutaserv login', 'login', ['username', 'password']);
-testForm('Mutaserv sign', 'sign', ['username', 'password', 'verification']);
+testForm('Mutaserv sandbox - login', 'login', ['username', 'password'], () => {
+	it('should have a failure with an unknown user', async () => {
+		await page.type('#username', 'foo');
+		await page.type('#password', 'bar');
+		await click('button');
+		await new Promise( f => setTimeout(f, 10));
+		const text = await getText('div[id="failure"]');
+		await expect(text).toBe('User not found');
+	});
+});
+testForm('Mutaserv sandbox - sign', 'sign', ['username', 'password', 'verification'], () => {
+	it('should have a mandatory verification field', async () => {
+		await page.type('#username', 'foo');
+		await page.type('#password', 'bar');
+		await click('button');
+		await new Promise( f => setTimeout(f, 10));
+		const text = await getText('div[id="failure"]');
+		await expect(text).toBe('Passwords don\'t match');
+	});
+});
