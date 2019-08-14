@@ -15,7 +15,7 @@ const ListBase = ({ elements, elementsIds, add }) => (
 			add({ text: val, newId: new Date().getTime() });
 		}}>Add</button>
 		<br />
-		<ul>
+		<ul id="content">
 			{ elementsIds ? map(
 				( id ) => <li class={style.element}>{ elements[id].text }</li>,
 				elementsIds

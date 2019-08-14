@@ -1,5 +1,5 @@
 export default (host, store) => {
-	let authenticated = false; let dflt = store.getState();
+	let authenticated = false;
 	const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
 	const _w = (f, b) => typeof(window) !== 'undefined' ? f() : b;
 	const req = (endpoint, method, s, f, e) => (
@@ -12,10 +12,7 @@ export default (host, store) => {
 	}).catch( err => { e(err); onError(err); });
 	return ({
 		sync: (ws) => {
-			let delay = 100; let applying = false;
-			let unsynced = _w(() => JSON.parse(localStorage.getItem('unsynced')), []);
-			unsynced = unsynced === null ? [] : unsynced;
-			_w(() => ws.setState(JSON.parse(localStorage.getItem('saved')), true));
+			let delay = 100; let applying = false; let unsynced = [];
 			store = ws;
 			const sync = () => {
 				if (!applying && authenticated) {
@@ -36,9 +33,6 @@ export default (host, store) => {
 		},
 		login: req('/user/login', 'POST', (success) => store.setState({ ...success, mutasync: true })),
 		sign: req('/user/sign', 'POST', (success) => store.setState({ ...success, mutasync: true })),
-		logout: () => {
-			_w(localStorage.setItem('saved', JSON.stringify(dflt)));
-			store.setState(dflt, true);
-		}
+		logout: () => { }
 	});
 };
