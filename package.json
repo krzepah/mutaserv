@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "lerna run test --stream",
+    "test": "lerna link --force-local && lerna run test --stream",
 	"install": "lerna exec yarn",
     "pre-commit": "yarn test"
   },
