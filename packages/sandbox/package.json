@@ -1,0 +1,73 @@
+{
+  "private": true,
+  "name": "mutaserv-sandbox",
+  "license": "MIT",
+  "scripts": {
+    "start": "per-env",
+    "start:production": "npm run -s serve",
+    "start:development": "npm run -s dev",
+    "build": "preact build",
+    "serve": "mutaserv run -c ./package.json --serve ./build -o http://localhost:8000",
+    "dev": "npm-run-all -p preact mutaserv",
+    "preact": "preact watch",
+    "mutaserv": "mutaserv run",
+    "load": "mutaserv load",
+    "lint": "eslint src",
+    "otest": "JEST_PUPPETEER_CONFIG=tests/jest-puppeteer.config.js jest --runInBand --no-coverage  tests/e2e/.*\\.js",
+    "test": "npm run build && npm run otest"
+  },
+  "mutaserv": {
+    "origin": "http://localhost:8080",
+    "port": "8000",
+    "reload": false,
+    "reducers": "./src/worker.js",
+    "log": {
+      "path": "./mutaserv.log"
+    },
+    "db": {
+      "verbose": false,
+      "dialect": "sqlite",
+      "path": "./mutaserv.db",
+      "name": "mutaserv",
+      "username": "mutaserv",
+      "password": "mutaserv",
+      "host": "localhost"
+    }
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-synacor"
+  },
+  "eslintIgnore": [
+    "build/*"
+  ],
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-synacor": "^2.0.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.8.0",
+    "jest-puppeteer": "^4.3.0",
+    "mutaserv": "^0.0.4",
+    "per-env": "^1.0.2",
+    "preact-cli": "2.2.1",
+    "preact-render-spy": "^1.2.1",
+    "puppeteer": "^1.19.0"
+  },
+  "dependencies": {
+    "linkstate": "^1.1.1",
+    "mutasync": "^0.0.1",
+    "npm-run-all": "^4.1.5",
+    "preact": "^8.2.6",
+    "preact-compat": "^3.17.0",
+    "preact-helmet": "^4.0.0-alpha-3",
+    "preact-render-to-string": "^4.1.0",
+    "preact-router": "^2.5.7",
+    "preact-virtual-list": "^0.3.1",
+    "stockroom": "krzepah/stockroom#temp",
+    "unistore": "krzepah/mutastore#temp",
+    "worker-loader": "^2.0.0"
+  },
+  "jest": {
+    "preset": "jest-puppeteer"
+  },
+  "version": "0.0.5"
+}

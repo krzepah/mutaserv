@@ -1,0 +1,79 @@
+{
+  "name": "mutasync",
+  "version": "0.0.5",
+  "license": "MIT",
+  "author": "Patrick Borowy <patrick@krzepah.net>",
+  "description": "Online state management",
+  "source": "index.js",
+  "module": "dist/storesync.es.js",
+  "main": "dist/storesync.js",
+  "umd:main": "dist/storesync.umd.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "npm-run-all --silent -p build:main -s size docs",
+    "build:main": "microbundle",
+    "test": "eslint index.js && npm run build && jest",
+    "size": "strip-json-comments --no-whitespace dist/storesync.js | gzip-size && bundlesize",
+    "docs": "documentation readme index.js -q --section API && npm run -s fixreadme",
+    "fixreadme": "node -e 'var fs=require(\"fs\");fs.writeFileSync(\"README.md\", fs.readFileSync(\"README.md\", \"utf8\").replace(/^-   /gm, \"- \"))'"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-developit",
+    "rules": {
+      "prefer-rest-params": 0
+    }
+  },
+  "bundlesize": [
+    {
+      "path": "dist/storesync.js",
+      "maxSize": "524b"
+    }
+  ],
+  "jest": {
+    "automock": false,
+    "setupFiles": [
+      "./test/setupJest.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          "pragma": "h"
+        }
+      ]
+    ]
+  },
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "keywords": [
+    "preact",
+    "mutations",
+    "online"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "7.5.5",
+    "babel-jest": "^24.8.0",
+    "bundlesize": "^0.17.1",
+    "documentation": "^12.0.2",
+    "eslint": "^4.16.0",
+    "eslint-config-developit": "^1.1.1",
+    "gzip-size-cli": "^2.1.0",
+    "jest": "^24.8.0",
+    "jest-fetch-mock": "^2.1.2",
+    "microbundle": "^0.11.0",
+    "npm-run-all": "^4.1.2",
+    "strip-json-comments-cli": "^1.0.1"
+  },
+  "dependencies": {
+    "mutastore": "*"
+  }
+}
