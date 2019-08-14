@@ -46,7 +46,8 @@
     "jest": "^21.2.1",
     "mutaserv": "^0.0.4",
     "per-env": "^1.0.2",
-    "preact-render-spy": "^1.2.1"
+    "preact-render-spy": "^1.2.1",
+	"preact-cli": "2.2.1"
   },
   "dependencies": {
     "linkstate": "^1.1.1",
