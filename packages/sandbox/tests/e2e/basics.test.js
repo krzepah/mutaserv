@@ -77,6 +77,7 @@ testForm('Mutaserv sandbox - login', 'login', ['username', 'password'], () => {
 		await expect(text).toBe('User not found');
 	});
 });
+
 testForm('Mutaserv sandbox - sign', 'sign', ['username', 'password', 'verification'], () => {
 	it('should have a mandatory verification field', async () => {
 		await page.type('#username', 'foo');
@@ -85,5 +86,24 @@ testForm('Mutaserv sandbox - sign', 'sign', ['username', 'password', 'verificati
 		await new Promise( f => setTimeout(f, 10));
 		const text = await getText('div[id="failure"]');
 		await expect(text).toBe('Passwords don\'t match');
+	});
+	it('should route to home on a correct sign', async () => {
+		await page.type('#verification', 'bar');
+		await new Promise( f => setTimeout(f, 10));
+		await click('button');
+		await new Promise( f => setTimeout(f, 10));
+		expect(await page.url()).toMatch('/');
+	});
+});
+
+describe('Mutaserv - login #2', () => {
+	beforeAll(async () => { await goTo('a[href="/login"]'); });
+	it('should be routed to home on successful login', async () => {
+		await page.type('#username', 'foo');
+		await page.type('#password', 'bar');
+		await new Promise( f => setTimeout(f, 10));
+		await click('button');
+		await new Promise( f => setTimeout(f, 10));
+		expect(await page.url()).toMatch('/');
 	});
 });
